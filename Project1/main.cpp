@@ -47,10 +47,10 @@ int main() {
 	// --------------- 绘制三角形 ---------------
 
 	// 指定三角形顶点
-	float vertices[] = {
-		-1, -1, 0, 1, 0, 0, 
-		 1, -1, 0, 0, 1, 0,
-		 0,  1, 0, 0, 0, 1 };
+	GLfloat vertices[] = {
+		 0,  1, 0, 1, 0, 0,
+		-1, -1, 0, 0, 1, 0,
+		 1, -1, 0, 0, 0, 1 };
 	// VBO
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
@@ -77,19 +77,19 @@ int main() {
 	// 激活程序对象
 	glUseProgram(shaderProgram);
 
-	// --------------- 链接顶点属性 --------------- 
-	// 位置属性
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
-	glEnableVertexAttribArray(0);
-
 	// --------------- 顶点数组对象 --------------- 
 	unsigned int VAO;
 	glGenVertexArrays(1, &VAO);
 	// 绑定
 	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	// 颜色属性，每两个顶点的颜色属性之间隔着6float，在每个顶点数据内颜色的偏移量为3float
+
+	// --------------- 链接顶点属性 --------------- 
+	// 位置属性
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(0);	
+	// 颜色属性
+	// 每两个顶点的颜色属性之间隔着6float，在每个顶点数据内颜色的偏移量为3float
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
@@ -97,7 +97,9 @@ int main() {
 	// 渲染循环
 	// 每次循环开始前检查GLFW是否被退出
 	while (!glfwWindowShouldClose(window)) {
-		processInput(window);
+		// 检查触发事件、更新窗口，回调
+		glfwPollEvents();
+		// processInput(window);
 		// 渲染
 		// 清屏颜色
 		glClearColor(0, 0, 0, 1);
@@ -111,8 +113,7 @@ int main() {
 
 		// 交换缓冲、绘制、显示
 		glfwSwapBuffers(window);
-		// 检查触发事件、更新窗口，回调
-		glfwPollEvents();
+		
 
 	}
 
