@@ -47,7 +47,10 @@ int main() {
 	// --------------- 绘制三角形 ---------------
 
 	// 指定三角形顶点
-	float vertices[] = { -1, -1, 0.0, 1, -1, 0.0, 0.0, 1, 0.0 };
+	float vertices[] = {
+		-1, -1, 0, 1, 0, 0, 
+		 1, -1, 0, 0, 1, 0,
+		 0,  1, 0, 0, 0, 1 };
 	// VBO
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
@@ -75,7 +78,8 @@ int main() {
 	glUseProgram(shaderProgram);
 
 	// --------------- 链接顶点属性 --------------- 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	// 位置属性
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	// --------------- 顶点数组对象 --------------- 
@@ -85,8 +89,10 @@ int main() {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	// 颜色属性，每两个顶点的颜色属性之间隔着6float，在每个顶点数据内颜色的偏移量为3float
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	glBindVertexArray(0);
 
 	// 渲染循环
 	// 每次循环开始前检查GLFW是否被退出
@@ -94,13 +100,14 @@ int main() {
 		processInput(window);
 		// 渲染
 		// 清屏颜色
-		glClearColor(1, 1, 1, 1);
+		glClearColor(0, 0, 0, 1);
 		// 清屏
 		glClear(GL_COLOR_BUFFER_BIT);
 		// 绘制
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindVertexArray(0);
 
 		// 交换缓冲、绘制、显示
 		glfwSwapBuffers(window);
@@ -110,8 +117,7 @@ int main() {
 	}
 
 	// 释放/删除资源
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	
 	glfwTerminate();
 	return 0;
 }
