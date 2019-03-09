@@ -18,11 +18,9 @@ static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
-
 // 着色器文件
 const char* vertexShaderFile = "shader.vs";
 const char* fragmentShaderFile = "shader.fs";
-
 const char* glsl_version = "#version 130";
 
 int main() {
@@ -62,7 +60,7 @@ int main() {
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 	ImVec4 clear_color = ImVec4(0, 0, 0, 1.00f);
-	ImVec4 triangleColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	ImVec4 triangleColor = ImVec4(-1.0f, -1.0f, -1.0f, 1.00f);
 	// --------------- 编译顶点、片段着色器 --------------- 
 	unsigned int vertexShader;
 	compileShader(vertexShader, vertexShaderFile, 1);
@@ -96,7 +94,11 @@ int main() {
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
-
+	bool dirty = false;
+	GLfloat originalVertices[] = {
+		 0,  1, 0, 1, 0, 0,
+		-1, -1, 0, 0, 1, 0,
+		 1, -1, 0, 0, 0, 1 };
 	// 渲染循环
 	// 每次循环开始前检查GLFW是否被退出
 	while (!glfwWindowShouldClose(window)) {
@@ -119,7 +121,6 @@ int main() {
 		glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
 		// ----------------- imGUI ----------------- 
 		// ----------------- Triangle ----------------- 
 		// 指定三角形顶点和颜色
@@ -127,19 +128,23 @@ int main() {
 			 0,  1, 0, triangleColor.x, triangleColor.y, triangleColor.z,
 			-1, -1, 0, triangleColor.x, triangleColor.y, triangleColor.z,
 			 1, -1, 0, triangleColor.x, triangleColor.y, triangleColor.z };
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-		// processInput(window);
-		// 渲染
-		// 清屏颜色
-		// glClearColor(0.5, 0.5, 0.5, 1);
-		// 清屏
-		// glClear(GL_COLOR_BUFFER_BIT);
+		if (dirty) {
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		}
+		else {
+			glBufferData(GL_ARRAY_BUFFER, sizeof(originalVertices), originalVertices, GL_STATIC_DRAW);
+			// judge dirty
+			if (triangleColor.x > 0) {
+				dirty = true;
+			}
+		}
 		// 绘制
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);
 		glViewport(0, 0, 1280, 720);
+		// ----------------- Triangle ----------------- 
 		glfwMakeContextCurrent(window);
 		// 交换缓冲、绘制、显示
 		glfwSwapBuffers(window);
