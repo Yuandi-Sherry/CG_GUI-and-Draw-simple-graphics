@@ -115,12 +115,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui.cpp" />
+    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_demo.cpp" />
+    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_widgets.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="imgui_impl_glfw.cpp" />
+    <ClCompile Include="imgui_impl_opengl3.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.fs" />
     <None Include="shader.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imconfig.h" />
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui.h" />
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_internal.h" />
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_rectpack.h" />
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_textedit.h" />
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_truetype.h" />
+    <ClInclude Include="imgui_impl_glfw.h" />
+    <ClInclude Include="imgui_impl_opengl3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
