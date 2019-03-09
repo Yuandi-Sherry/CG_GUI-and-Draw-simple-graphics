@@ -11,4 +11,5 @@ void main() {
 	// 内置变量，保存顶点位置的齐次坐标，第四个分量为透明度
 	gl_Position = vec4(aPos, 1.0);
 	ourColor = color;
+	gl_PointSize = 100;
 }
