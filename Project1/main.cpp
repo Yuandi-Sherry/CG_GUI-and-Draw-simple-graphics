@@ -14,6 +14,15 @@ void processInput(GLFWwindow * window);
 bool readFile(const string & fileName, string & content);
 void checkCompile(const int & shader, const int & checkType);
 void compileShader(unsigned int & shader, const char * filename, const int & shaderType);
+void displayPoint(const int & shaderProgram, const int & VAO);
+void displayLine(const int & shaderProgram, const int & VAO, const int & VBO);
+void displayRec(const int & shaderProgram, const int & VAO, const int & VBO);
+void displayLine(const int & shaderProgram, const int & VAO);
+void displayTriangle(const int & shaderProgram, const int & VAO, bool & dirty, const ImVec4 & triangleColor);
+void initGUI(GLFWwindow* window);
+void displayGUI(GLFWwindow* window, bool & showPoint, bool & showLine, bool & showTri, bool & showRec, ImVec4& triangleColor, const ImVec4& clear_color);
+
+
 static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
@@ -50,15 +59,9 @@ int main() {
 		cout << "FAIL" << endl;
 		return -1;
 	}
-	// set up GUI context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-	// Setup Platform/Renderer bindings
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init(glsl_version);
+	// init GUI
+	initGUI(window);
+	// 初始颜色
 	ImVec4 clear_color = ImVec4(0, 0, 0, 1.00f);
 	ImVec4 triangleColor = ImVec4(-1.0f, -1.0f, -1.0f, 1.00f);
 	// --------------- 编译顶点、片段着色器 --------------- 
@@ -96,144 +99,34 @@ int main() {
 	glBindVertexArray(0);
 	// 改变三角形颜色
 	bool dirty = false;
-	// 三角形初始颜色
-	GLfloat triangleVertices[] = {
-		 0,  0.5f, 0, 1, 0, 0,
-		-0.5f, -0.5f, 0, 0, 1, 0,
-		 0.5f, -0.5f, 0, 0, 0, 1 };
-	// 点、线、矩形的显示
-	bool showPoint = false;
-	bool showLine = false;
-	bool showRec = false;
-	bool showTri = false;
 
+	// 点、线、矩形的显示
+	bool showPoint = true;
+	bool showLine = true;
+	bool showRec = true;
+	bool showTri = true;
 
 	// 渲染循环
 	// 每次循环开始前检查GLFW是否被退出
 	while (!glfwWindowShouldClose(window)) {
 		// 检查触发事件、更新窗口，回调
 		glfwPollEvents();
-		// ----------------- imGUI ----------------- 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		// 颜色选择窗口细节
-		ImGui::Begin("Color Setting");
-		
-		ImGui::Checkbox("Point", &showPoint);      // Edit bools storing our window open/close state
-		ImGui::Checkbox("Triangle", &showTri);
-		ImGui::ColorEdit3("Triangle color", (float*)&triangleColor);
-		ImGui::Checkbox("Line", &showLine);
-		ImGui::Checkbox("Rectangle", &showRec);
-		ImGui::End();
-		// Rendering
-		ImGui::Render();
-		int display_w, display_h;
-		glfwMakeContextCurrent(window);
-		glfwGetFramebufferSize(window, &display_w, &display_h);
-		glViewport(0, 0, display_w, display_h);
-		glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-		glClear(GL_COLOR_BUFFER_BIT);
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		// ----------------- imGUI ----------------- ]
+		displayGUI(window, showPoint, showLine, showTri, showRec, triangleColor, clear_color);
 		// ----------------- imGUI ----------------- 
 		// ----------------- Triangle ----------------- 
 		// 指定三角形顶点和颜色
 		if (showTri) {
-			GLfloat vertices[] = {
-			 0,  1, 0, triangleColor.x, triangleColor.y, triangleColor.z,
-			-1, -1, 0, triangleColor.x, triangleColor.y, triangleColor.z,
-			 1, -1, 0, triangleColor.x, triangleColor.y, triangleColor.z };
-			if (dirty) {
-				glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-			}
-			else {
-				glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
-				// judge dirty
-				if (triangleColor.x > 0) {
-					dirty = true;
-				}
-			}
-			// 绘制
-			glViewport(0, 0, 400, 400);
-			glUseProgram(shaderProgram);
-			glBindVertexArray(VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 3);
-			glBindVertexArray(0);
-			// 
+			displayTriangle(shaderProgram, VAO, dirty, triangleColor);
 		}
 		if (showPoint) {
-			float pointVertex[] = {
-				0, 0, 0, 1, 1, 1
-			};
-
-			// 位置属性
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
-			glEnableVertexAttribArray(0);
-			//// 颜色属性
-			//// 每两个顶点的颜色属性之间隔着6float，在每个顶点数据内颜色的偏移量为3float
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-			glEnableVertexAttribArray(1);
-			
-			glBufferData(GL_ARRAY_BUFFER, sizeof(pointVertex), pointVertex, GL_STATIC_DRAW);
-
-			glViewport(400, 0, 400, 400);
-			glUseProgram(shaderProgram);
-			glBindVertexArray(VAO);
-			glPointSize(5.0f);
-			glDrawArrays(GL_POINTS, 0, 1);
+			displayPoint(shaderProgram, VAO);
 		}
 		if (showLine) {
-			float lineVertices[] = {
-				-0.5f, -0.5f, 0, 1, 1, 1,
-				0.5f, 0.5f, 0, 1, 0, 0
-			};
-			// 位置属性
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
-			glEnableVertexAttribArray(0);
-			//// 颜色属性
-			//// 每两个顶点的颜色属性之间隔着6float，在每个顶点数据内颜色的偏移量为3float
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-			glEnableVertexAttribArray(1);
-
-			glBufferData(GL_ARRAY_BUFFER, sizeof(lineVertices), lineVertices, GL_STATIC_DRAW);
-
-			glViewport(400, 400, 400, 400);
-			glUseProgram(shaderProgram);
-			glBindVertexArray(VAO);
-			glDrawArrays(GL_LINE_STRIP, 0, 2); // 注意这里不是GL_LINE
+			displayLine(shaderProgram, VAO);
 		}
 		if (showRec) {
-			float recVertices[] = {
-				0.5f, 0.5f, 0.0f, 1, 1, 1,   // 右上角
-				0.5f, -0.5f, 0.0f, 0, 1, 1,  // 右下角
-				-0.5f, -0.5f, 0.0f, 1, 0, 1, // 左下角
-				-0.5f, 0.5f, 0.0f, 1, 1, 0   // 左上角
-			};
-			unsigned int indices[] = { // 注意索引从0开始! 
-				0, 1, 3, // 第一个三角形
-				1, 2, 3  // 第二个三角形
-			};
-			// 索引缓冲对象
-			unsigned int EBO;
-			glGenBuffers(1, &EBO);
-			
-			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(recVertices), recVertices, GL_STATIC_DRAW);
-			// 这里的 缓冲类型为GL_ELEMENT_ARRAY_BUFFER
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
-			glEnableVertexAttribArray(0);
-
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-			glEnableVertexAttribArray(1);
-
-			glViewport(0, 400, 400, 400); // 注意视口要加载use之前
-			glUseProgram(shaderProgram);
-			glBindVertexArray(VAO);
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
+			displayRec(shaderProgram, VAO, VBO);
 		}
 		// ----------------- Triangle ----------------- 
 		glfwMakeContextCurrent(window);
@@ -321,4 +214,140 @@ void compileShader(unsigned int & shader, const char * filename, const int & sha
 	else {
 		cout << "Fail to read shader file" << endl;
 	}
+}
+
+void displayPoint(const int & shaderProgram, const int & VAO) {
+	float pointVertex[] = {
+		0, 0, 0, 1, 1, 1
+	};
+	// 位置属性
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(0);
+	//// 颜色属性
+	//// 每两个顶点的颜色属性之间隔着6float，在每个顶点数据内颜色的偏移量为3float
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(pointVertex), pointVertex, GL_STATIC_DRAW);
+	glViewport(400, 0, 400, 400);
+	glUseProgram(shaderProgram);
+	glBindVertexArray(VAO);
+	glPointSize(5.0f);
+	glDrawArrays(GL_POINTS, 0, 1);
+}
+
+void displayRec(const int & shaderProgram, const int & VAO, const int & VBO) {
+	float recVertices[] = {
+		0.5f, 0.5f, 0.0f, 1, 1, 1,   // 右上角
+		0.5f, -0.5f, 0.0f, 0, 1, 1,  // 右下角
+		-0.5f, -0.5f, 0.0f, 1, 0, 1, // 左下角
+		-0.5f, 0.5f, 0.0f, 1, 1, 0   // 左上角
+	};
+	unsigned int indices[] = { // 注意索引从0开始! 
+		0, 1, 3, // 第一个三角形
+		1, 2, 3  // 第二个三角形
+	};
+	// 索引缓冲对象
+	unsigned int EBO;
+	glGenBuffers(1, &EBO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(recVertices), recVertices, GL_STATIC_DRAW);
+	// 这里的 缓冲类型为GL_ELEMENT_ARRAY_BUFFER
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	glViewport(0, 400, 400, 400); // 注意视口要加载use之前
+	glUseProgram(shaderProgram);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+}
+
+void displayLine(const int & shaderProgram, const int & VAO) {
+	float lineVertices[] = {
+		-0.5f, -0.5f, 0, 1, 1, 1,
+		0.5f, 0.5f, 0, 1, 0, 0
+	};
+	// 位置属性
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(0);
+	//// 颜色属性
+	//// 每两个顶点的颜色属性之间隔着6float，在每个顶点数据内颜色的偏移量为3float
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(lineVertices), lineVertices, GL_STATIC_DRAW);
+	glViewport(400, 400, 400, 400);
+	glUseProgram(shaderProgram);
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_LINE_STRIP, 0, 2); // 注意这里不是GL_LINE
+}
+
+void displayTriangle(const int & shaderProgram, const int & VAO, bool & dirty, const ImVec4 & triangleColor) {
+	// 三角形初始颜色
+	GLfloat triangleVertices[] = {
+		 0,  0.5f, 0, 1, 0, 0,
+		-0.5f, -0.5f, 0, 0, 1, 0,
+		 0.5f, -0.5f, 0, 0, 0, 1 };
+
+	GLfloat vertices[] = {
+		0,  0.5f, 0, triangleColor.x, triangleColor.y, triangleColor.z,
+		-0.5f, -0.5f, 0, triangleColor.x, triangleColor.y, triangleColor.z,
+		0.5f, -0.5f, 0, triangleColor.x, triangleColor.y, triangleColor.z };
+	if (dirty) {
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	}
+	else {
+		glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
+		// judge dirty
+		if (triangleColor.x > 0) {
+			dirty = true;
+		}
+	}
+	// 绘制
+	glViewport(0, 0, 400, 400);
+	glUseProgram(shaderProgram);
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindVertexArray(0);
+}
+
+void initGUI(GLFWwindow* window) {
+	// set up GUI context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	// Setup Platform/Renderer bindings
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
+}
+
+void displayGUI(GLFWwindow* window, bool & showPoint, bool & showLine, bool & showTri, bool & showRec, ImVec4& triangleColor, const ImVec4& clear_color) {
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+	// 颜色选择窗口细节
+	ImGui::Begin("Color Setting");
+	ImGui::Checkbox("Point", &showPoint);
+	ImGui::Checkbox("Line", &showLine);
+	ImGui::Checkbox("Triangle", &showTri);
+	ImGui::ColorEdit3("Triangle color", (float*)&triangleColor);
+	ImGui::Checkbox("Rectangle", &showRec);
+	ImGui::End();
+	// Rendering
+	ImGui::Render();
+	int display_w, display_h;
+	glfwMakeContextCurrent(window);
+	glfwGetFramebufferSize(window, &display_w, &display_h);
+	glViewport(0, 0, display_w, display_h);
+	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+	glClear(GL_COLOR_BUFFER_BIT);
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
