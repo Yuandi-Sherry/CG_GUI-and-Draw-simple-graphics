@@ -72,7 +72,6 @@ int main() {
 					if (homework2.severalTri)
 						homework2.displaySeveralTriangle();
 				}
-
 				// 指定三角形顶点和颜色
 				if (homework2.triangle) {
 					homework2.displayTriangle();
@@ -90,6 +89,9 @@ int main() {
 				}
 				if (homework3.triangleFrame) {
 					homework3.drawTriangle();
+				}
+				if (homework3.filledTri) {
+					homework3.fillTriangle();
 				}
 			}
 			glfwMakeContextCurrent(window);
@@ -235,6 +237,7 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 	if (homework3.homework3) {
 		ImGui::Checkbox("Triangle Frame", &homework3.triangleFrame);
 		ImGui::Checkbox("Circle Frame", &homework3.circleFrame);
+		ImGui::Checkbox("Filled Triangle", &homework3.filledTri);
 		ImGui::InputFloat("Radius", &homework3.radius);
 		homework2.homework2 = false;
 	}

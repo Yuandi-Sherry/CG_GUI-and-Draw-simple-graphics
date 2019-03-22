@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <cmath>
 class Homework3
 {
 public:
@@ -19,10 +20,13 @@ public:
 	void drawCircle();
 	void setTriangle(const float vertices[6]);
 	void setCircle(const float center[2], const float & radius);
+	void fillTriangle();
+
 	bool homework3;
 	bool triangleFrame;
 	bool circleFrame;
 	float radius;
+	bool filledTri;
 private:
 	float triangleVertex[6];
 	int shaderProgram;
@@ -34,6 +38,7 @@ private:
 	float judgePosReltoCircle(const float & x, const float & y);
 	void draw8points(const float & x, const float & y);
 	void initBools();
+	bool isInTri(const float & x, const float & y, const float * edge1, const float * edge2, const float * edge3);
 	
 };
 
