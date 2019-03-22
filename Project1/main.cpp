@@ -237,8 +237,10 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 	if (homework3.homework3) {
 		ImGui::Checkbox("Triangle Frame", &homework3.triangleFrame);
 		ImGui::Checkbox("Circle Frame", &homework3.circleFrame);
+		int temp = 1200;
 		ImGui::Checkbox("Filled Triangle", &homework3.filledTri);
-		ImGui::InputFloat("Radius", &homework3.radius);
+		ImGui::InputInt("Radius", &temp);
+		homework3.radius = (float)temp / windowWidth;
 		homework2.homework2 = false;
 	}
 

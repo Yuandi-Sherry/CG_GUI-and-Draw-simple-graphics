@@ -30,8 +30,7 @@ public:
 private:
 	float triangleVertex[6];
 	int shaderProgram;
-	float center[2];
-	
+	float center[2];	
 	void drawPoint(const float location[3], const float color[3], const int & VAO, const int &VBO);
 	void drawLine(const float startPoint[2], const float endPoint[2], const int & VAO, const int &VBO);
 	float color[3] = { 1.0f, 0, 0 };
@@ -39,6 +38,5 @@ private:
 	void draw8points(const float & x, const float & y);
 	void initBools();
 	bool isInTri(const float & x, const float & y, const float * edge1, const float * edge2, const float * edge3);
-	
 };
 
