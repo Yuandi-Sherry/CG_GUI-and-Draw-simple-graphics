@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "Homework3.h"
 #include <stdio.h>
 #define N 888
 using namespace std;
@@ -21,10 +22,9 @@ void displayRec(const int & shaderProgram);
 void displayLine(const int & shaderProgram);
 void displayTriangle(const int & shaderProgram, bool & dirty, const ImVec4 & triangleColor);
 void initGUI(GLFWwindow* window);
-void displayGUI(GLFWwindow* window, bool & showPoint, bool & showLine, bool & showTri, bool & showRec, bool & extra, bool & showSevTri, ImVec4& triangleColor, const ImVec4& clear_color);
+void displayGUI(GLFWwindow* window, Homework3 & homework3, bool & showLine, bool & showTri, bool & showRec, bool & extra, bool & showSevTri, ImVec4& triangleColor, const ImVec4& clear_color);
 void displaySeveralTriangle(const int & shaderProgram/*, const int & VAO, const int & VBO*/);
 void displayPoint(const int & shaderProgram, const float location[3], const float color[3]);
-void drawLineByBresenham(const int & shaderProgram, const float startPoint[2], const float endPoint[2]);
 GLFWwindow* initialize();
 int windowWidth = 1200;
 int windowHeight = 1200;
@@ -61,7 +61,7 @@ int main() {
 		checkCompile(shaderProgram, 2);
 		// 激活程序对象
 		glUseProgram(shaderProgram);
-
+		
 		// 改变三角形颜色
 		bool dirty = false;
 		// 点、线、矩形的显示
@@ -71,24 +71,22 @@ int main() {
 		bool extra = false;
 		bool showSevTri = false;
 		bool showRec = false;
-		bool homework3 = true;
-		bool bresenham = true;
 		// 渲染循环
 		// 每次循环开始前检查GLFW是否被退出
 		// 随机三角形的形状
 		float triangleVertex[6] = { rand() % (N + 1) / (float)(N + 1), rand() % (N + 1) / (float)(N + 1), rand() % (N + 1) / (float)(N + 1), rand() % (N + 1) / (float)(N + 1),rand() % (N + 1) / (float)(N + 1), rand() % (N + 1) / (float)(N + 1) };
+		Homework3 homework3(triangleVertex, shaderProgram);
+		
 		while (!glfwWindowShouldClose(window)) {
 			// 检查触发事件、更新窗口，回调
 			glfwPollEvents();
-			displayGUI(window, showPoint, showLine, showTri, showRec, extra, showSevTri, triangleColor, clear_color);
-			if (homework3) {
-				if (bresenham) {
-					float point1[2] = { triangleVertex[0], triangleVertex[1] };
-					float point2[2] = { triangleVertex[2], triangleVertex[3] };
-					float point3[2] = { triangleVertex[4], triangleVertex[5] };
-					drawLineByBresenham(shaderProgram, point1, point2);
-					drawLineByBresenham(shaderProgram, point1, point3);
-					drawLineByBresenham(shaderProgram, point2, point3);					
+			displayGUI(window, homework3, showLine, showTri, showRec, extra, showSevTri, triangleColor, clear_color);
+			if (homework3.homework3) {
+				if (homework3.circleFrame) {
+					homework3.drawCircle();
+				}
+				if (homework3.triangleFrame) {
+					homework3.drawTriangle();
 				}
 			}
 			else {
@@ -128,55 +126,7 @@ int main() {
 	
 	return 0;
 }
-/*
- * 通过Bresenham方法绘制直线
- */
-void drawLineByBresenham(const int & shaderProgram, const float startPoint[2], const float endPoint[2]) {
-	float color[3] = { 1.0f, 0, 0 };
-	float deltaX = abs(endPoint[0] - startPoint[0]);
-	float deltaY = abs(endPoint[1] - startPoint[1]);
-	float stepX = (endPoint[0] - startPoint[0]) / deltaX * (float)2 / windowWidth;
-	float stepY = (endPoint[1] - startPoint[1]) / deltaY * (float)2 / windowHeight;
-	float y_i = startPoint[1];
-	float x_i = startPoint[0];
-	// 判断斜率与45°的大小
-	if (abs(deltaY / deltaX) < 1) {
-		float p_i = 2 * deltaY - deltaX;
-		// cout << "stepX" << stepX << endl << "stepY" << stepY << endl;
-		while (abs(x_i - startPoint[0]) < abs(endPoint[0] - startPoint[0])) {
-			if (p_i <= 0) {
-				float loc[3] = { x_i, y_i, 0 };
-				displayPoint(shaderProgram, loc, color);
-				p_i = p_i + 2 * deltaY;
-			}
-			else {
-				float loc[3] = { x_i, y_i, 0 };
-				displayPoint(shaderProgram, loc, color);
-				p_i = p_i + 2 * deltaY - 2 * deltaX;
-				y_i = y_i + stepY;
-			}
-			x_i = x_i + stepX;
-		}
-	}
-	else {
-		float p_i = 2 * deltaY - deltaX;
-		while (abs(y_i - startPoint[1]) < abs(endPoint[1] - startPoint[1])) {
-			if (p_i <= 0) {
-				float loc[3] = { x_i, y_i, 0 };
-				displayPoint(shaderProgram, loc, color);
-				p_i = p_i + 2 * deltaX;
-			}
-			else {
-				float loc[3] = { x_i, y_i , 0 };
-				displayPoint(shaderProgram, loc, color);
-				p_i = p_i + 2 * deltaX - 2 * deltaY;
-				x_i = x_i + stepX;
-			}
-			y_i = y_i + stepY;			
-		}
-	}
 
-}
 GLFWwindow* initialize() {
 	// Setup window
 	glfwSetErrorCallback(glfw_error_callback);
@@ -283,33 +233,8 @@ void compileShader(unsigned int & shader, const char * filename, const int & sha
 }
 
 void displayPoint(const int & shaderProgram,const float location[3], const float color[3]) {
-	float pointVertex[6];
-	for (int i = 0; i < 3; i++) {
-		pointVertex[i] = location[i];
-	}
-	for (int i = 0; i < 3; i++) {
-		pointVertex[i + 3] = color[i];
-	}
-	unsigned int VBO;
-	unsigned int VAO; // 顶点数组对象 
-	glGenBuffers(1, &VBO);
-	glGenVertexArrays(1, &VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindVertexArray(VAO);
-	// 位置、颜色属性
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(pointVertex), pointVertex, GL_STATIC_DRAW);
-	glViewport(0, 0, windowWidth, windowHeight);
-	glUseProgram(shaderProgram);
-	glBindVertexArray(VAO);
-	// glPointSize(1.0f);
-	glDrawArrays(GL_POINTS, 0, 1);
+	
 }
-
 
 void displayPoint(const int & shaderProgram/*, const int & VAO*/) {
 	float pointVertex[] = {
@@ -451,14 +376,19 @@ void initGUI(GLFWwindow* window) {
 	ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
-void displayGUI(GLFWwindow* window, bool & showPoint, bool & showLine, bool & showTri, bool & showRec, bool & extra, bool & showSevTri, ImVec4& triangleColor, const ImVec4& clear_color) {
+void displayGUI(GLFWwindow* window, Homework3 & homework3, bool & showLine, bool & showTri, bool & showRec, bool & extra, bool & showSevTri, ImVec4& triangleColor, const ImVec4& clear_color) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 	// 颜色选择窗口细节
 	ImGui::Begin("Color Setting");
 	ImGui::Checkbox("Change to several triangles", &extra);
-	if (!extra) {
+	ImGui::Checkbox("Homework3", &homework3.homework3);
+	if (homework3.homework3) {
+		ImGui::Checkbox("Triangle Frame", &homework3.triangleFrame);
+		ImGui::Checkbox("Circle Frame", &homework3.circleFrame);
+	}
+	/*if (!extra) {
 		ImGui::Checkbox("Point", &showPoint);
 		ImGui::Checkbox("Line", &showLine);
 		ImGui::Checkbox("Triangle", &showTri);
@@ -467,7 +397,7 @@ void displayGUI(GLFWwindow* window, bool & showPoint, bool & showLine, bool & sh
 	else {
 		ImGui::Checkbox("Several Triangles", &showSevTri);
 		ImGui::Checkbox("Rectangle", &showRec);
-	}
+	}*/
 	ImGui::End();
 	// Rendering
 	ImGui::Render();
