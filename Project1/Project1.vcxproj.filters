@@ -41,37 +41,37 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.fs">
-      <Filter>源文件</Filter>
-    </None>
     <None Include="shader.vs">
-      <Filter>源文件</Filter>
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="shader.fs">
+      <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_internal.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_rectpack.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_textedit.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_truetype.h">
-      <Filter>源文件</Filter>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui.h">
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imconfig.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui.h">
-      <Filter>源文件</Filter>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_truetype.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_rectpack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_textedit.h">
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_glfw.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_opengl3.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_internal.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
