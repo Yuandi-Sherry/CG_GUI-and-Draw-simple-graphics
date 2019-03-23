@@ -66,28 +66,28 @@ void Homework3::drawLine(const int startPoint[2], const int endPoint[2], const i
 	int x_i = startPoint[0];
 	// 这里需要判断斜率无穷的情况
 	if (deltaX == 0) {
-		int stepY = (endPoint[1] - startPoint[1]) / deltaY;
+		int directionY = (endPoint[1] - startPoint[1]) / deltaY;
 		while (abs(y_i - startPoint[1]) < abs(endPoint[1] - startPoint[1])) {
 			float loc[3] = { (float)x_i / windowWidth * 2, (float)y_i / windowHeight * 2 , 0 };
 			drawPoint(loc, color, VAO);
-			y_i += stepY;
+			y_i += directionY;
 		}
 	}
 	else if (deltaY == 0) {
-		int stepX = (endPoint[0] - startPoint[0]) / deltaX;
+		int directionX = (endPoint[0] - startPoint[0]) / deltaX;
 		while (abs(x_i - startPoint[0]) < abs(endPoint[0] - startPoint[0])) {
 			float loc[3] = { (float)x_i / windowWidth * 2, (float)y_i / windowHeight * 2 , 0 };
 			drawPoint(loc, color, VAO);
-			x_i = x_i + stepX;
+			x_i = x_i + directionX;
 		}
 	}
 	else {
-		int stepY = (endPoint[1] - startPoint[1]) / deltaY;
-		int stepX = (endPoint[0] - startPoint[0]) / deltaX;
+		int directionY = (endPoint[1] - startPoint[1]) / deltaY;
+		int directionX = (endPoint[0] - startPoint[0]) / deltaX;
 		// 判断斜率与45°的大小
 		if (abs(deltaY / deltaX) < 1) {
 			float p_i = 2 * deltaY - deltaX;
-			// cout << "stepX" << stepX << endl << "stepY" << stepY << endl;
+			// cout << "directionX" << directionX << endl << "directionY" << directionY << endl;
 			while (abs(x_i - startPoint[0]) < abs(endPoint[0] - startPoint[0])) {
 				float loc[3] = { (float)x_i / windowWidth * 2, (float)y_i / windowHeight * 2 , 0 };
 				drawPoint(loc, color, VAO);
@@ -96,9 +96,9 @@ void Homework3::drawLine(const int startPoint[2], const int endPoint[2], const i
 				}
 				else {
 					p_i = p_i + 2 * deltaY - 2 * deltaX;
-					y_i = y_i + stepY;
+					y_i = y_i + directionY;
 				}
-				x_i = x_i + stepX;
+				x_i = x_i + directionX;
 			}
 		}
 		else {
@@ -111,9 +111,9 @@ void Homework3::drawLine(const int startPoint[2], const int endPoint[2], const i
 				}
 				else {
 					p_i = p_i + 2 * deltaX - 2 * deltaY;
-					x_i = x_i + stepX;
+					x_i = x_i + directionX;
 				}
-				y_i = y_i + stepY;
+				y_i = y_i + directionY;
 			}
 		}
 	}
@@ -146,10 +146,10 @@ void Homework3::drawCircle() {
 	while (x_i < center[0] + sqrt(2) * radius/2 + 1 ) {
 		draw8points(x_i, y_i);
 		if (d_i < 0) {
-			d_i = d_i + 2*x_i + 3;
+			d_i = d_i + 2*x_i - 2*center[0];
 		}
 		else {
-			d_i = d_i + 2*(x_i- y_i) + 5;
+			d_i = d_i + 2 * (x_i - y_i) + 2 + 2 * center[1] - 2 * center[0];
 			y_i--;
 		}
 		x_i++;
@@ -209,13 +209,10 @@ void Homework3::fillTriangle() {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
-	int edge2[3] = { point1[0] - point2[0], point1[1] - point2[1], 0 }; // 2 -> 1
-	int edge3[3] = { point2[0] - point3[0], point2[1] - point3[1], 0 }; // 3 -> 2
-	int edge1[3] = { point3[0] - point1[0], point3[1] - point1[1], 0 }; // 1 -> 3
 	for (float i = left; i < right; i++) {
 		for (float j = bottom; j < top; j++) {
 			// 判断点是否在三角形内
-			if (isInTri(i, j, edge1, edge2, edge3)) {
+			if (isInTri(i, j)) {
 				float loc[3] = { (float) i / windowWidth * 2, (float)j / windowHeight * 2, 0.0 };
 				drawPoint(loc, color, VAO);
 			}
@@ -225,14 +222,13 @@ void Homework3::fillTriangle() {
 	glDeleteBuffers(1, &VBO);
 }
 
-bool Homework3::isInTri(const int & x, const int & y, const int * edge1, const int * edge2, const int * edge3) {
+bool Homework3::isInTri(const int & x, const int & y) {
 	float P2[2] = { x - point2[0], y - point2[1] }; // 2 -> P
 	float P3[2] = { x - point3[0], y - point3[1]}; // 3 -> P
 	float P1[2] = { x - point1[0], y - point1[1]}; // 1 -> P
-
-	float cross2 = edge2[0] * P2[1] - edge2[1] * P2[0];
-	float cross3 = edge3[0] * P3[1] - edge3[1] * P3[0];
-	float cross1 = edge1[0] * P1[1] - edge1[1] * P1[0];
+	float cross2 = P1[0] * P2[1] - P1[1] * P2[0];
+	float cross3 = P2[0] * P3[1] - P2[1] * P3[0];
+	float cross1 = P3[0] * P1[1] - P3[1] * P1[0];
  	if (cross2 * cross3 > 0 && cross1 * cross3 > 0 && cross1 * cross2 > 0) {
 		return true;
 	}

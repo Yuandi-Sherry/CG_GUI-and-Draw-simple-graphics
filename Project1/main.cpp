@@ -202,7 +202,6 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-	// 颜色选择窗口细节
 	ImGui::Begin("Options", NULL, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMenuBar())
 	{

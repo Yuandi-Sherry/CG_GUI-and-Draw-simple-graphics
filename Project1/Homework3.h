@@ -47,7 +47,7 @@ private:
 	// draw circle
 	void draw8points(const int & x, const int & y);
 	// fill Tri
-	bool isInTri(const int & x, const int & y, const int * edge1, const int * edge2, const int * edge3);
+	bool isInTri(const int & x, const int & y);
 	void initVars();
 	void initBound();
 	
