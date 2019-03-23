@@ -10,16 +10,16 @@
 class Homework3
 {
 public:
-	Homework3(const float vertices[6], const int & shaderProgram);
-	Homework3(const float & centerX, const float & centerY, const float & radius, const int & shaderProgram);
+	Homework3(const int vertices[6], const int & shaderProgram);
+	Homework3(const int & centerX, const int & centerY, const int & radius, const int & shaderProgram);
 	Homework3(const int & shaderProgram);
 	~Homework3() {
 
 	}
 	void drawTriangle();
 	void drawCircle();
-	void setTriangle(const float & p1x = -0.5, const float & p1y = 0.5, const float & p2x = -0.0, const float & p2y = 1.0, const float & p3x = 0.5, const float & p3y = -0.5);
-	void setCircle(const float & centerX = 0, const float & centerY = 0, const float & radius = 0.5);
+	void setTriangle(const int & p1x = -300, const int & p1y = -300, const int & p2x = 0, const int & p2y = 600, const int & p3x = 300, const int & p3y = -300);
+	void setCircle(const int & centerX = 0, const int & centerY = 0, const int & radius = 500);
 	void fillTriangle();
 	void displayController();
 	void imGuiSetting();
@@ -30,8 +30,8 @@ public:
 	bool circleFrame;
 	bool filledTri;
 	// input Vars
-	int centerInt[2];
-	int radiusInt;
+	int center[2];
+	int radius;
 	// tri
 	int point1[2];
 	int point2[2];
@@ -40,20 +40,14 @@ private:
 	// const
 	float color[3] = { 1.0f, 0, 0 };
 	int shaderProgram;
-	// triangle
-	float triangleVertex[6];
-	float top, bottom, left, right;
-	// circle
-	float center[2];
-	float radius;
+	int top, bottom, left, right;
 	// basic Methods
-	void drawPoint(const float location[3], const float color[3], const int & VAO, const int &VBO);
-	void drawLine(const float startPoint[2], const float endPoint[2], const int & VAO, const int &VBO);
+	void drawPoint(const float location[3], const float color[3], const int & VAO);
+	void drawLine(const int startPoint[2], const int endPoint[2], const int & VAO);
 	// draw circle
-	float judgePosReltoCircle(const float & x, const float & y);
-	void draw8points(const float & x, const float & y);
+	void draw8points(const int & x, const int & y);
 	// fill Tri
-	bool isInTri(const float & x, const float & y, const float * edge1, const float * edge2, const float * edge3);
+	bool isInTri(const int & x, const int & y, const int * edge1, const int * edge2, const int * edge3);
 	void initVars();
 	void initBound();
 	

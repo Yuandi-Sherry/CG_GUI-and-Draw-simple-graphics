@@ -54,7 +54,7 @@ int main() {
 		checkCompile(shaderProgram, 2);
 		// 激活程序对象
 		glUseProgram(shaderProgram);
-		
+		// 新建作业对象
 		Homework2 homework2(shaderProgram);
 		Homework3 homework3(shaderProgram);
 		
@@ -64,7 +64,7 @@ int main() {
 			// 检查触发事件、更新窗口，回调
 			glfwPollEvents();
 			displayGUI(window, homework2, homework3);
-			
+			// 作业对象的显示控制
 			homework2.displayController();
 			homework3.displayController();
 			glfwMakeContextCurrent(window);
@@ -206,31 +206,14 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 	ImGui::Begin("Options", NULL, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMenuBar())
 	{
+		// 作业GUI显示
 		homework2.imGuiMenuSetting();
 		homework3.imGuiMenuSetting();
 		ImGui::EndMenuBar();
 	}
 	homework2.imGuiSetting();
 	homework3.imGuiSetting();
-	//if (homework3.homework3) {
-	//	ImGui::Checkbox("Triangle Frame", &homework3.triangleFrame);
-	//	ImGui::Checkbox("Circle Frame", &homework3.circleFrame);
-	//	
-	//	homework2.homework2 = false;
-	//}
 
-	//if (homework2.homework2) {
-	//	ImGui::Checkbox("Triangle", &homework2.triangle);
-	//	ImGui::ColorEdit3("Triangle color", (float*)&homework2.triangleColor);
-	//	ImGui::Checkbox("Point", &homework2.point);
-	//	ImGui::Checkbox("Line", &homework2.line);
-	//	ImGui::Checkbox("Bonus", &homework2.bonus);
-	//	if (homework2.bonus) {
-	//		ImGui::Checkbox("Square", &homework2.rectangle);
-	//		ImGui::Checkbox("Several Triangle", &homework2.severalTri);
-	//	}
-	//	homework3.homework3 = false;
-	//}
 	ImGui::End();
 	// Rendering
 	ImGui::Render();
