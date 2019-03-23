@@ -11,32 +11,51 @@ class Homework3
 {
 public:
 	Homework3(const float vertices[6], const int & shaderProgram);
-	Homework3(const float center[2], const float & radius, const int & shaderProgram);
+	Homework3(const float & centerX, const float & centerY, const float & radius, const int & shaderProgram);
 	Homework3(const int & shaderProgram);
 	~Homework3() {
 
 	}
 	void drawTriangle();
 	void drawCircle();
-	void setTriangle(const float vertices[6]);
-	void setCircle(const float center[2], const float & radius);
+	void setTriangle(const float & p1x = -0.5, const float & p1y = 0.5, const float & p2x = -0.0, const float & p2y = 1.0, const float & p3x = 0.5, const float & p3y = -0.5);
+	void setCircle(const float & centerX = 0, const float & centerY = 0, const float & radius = 0.5);
 	void fillTriangle();
+	void displayController();
+	void imGuiSetting();
+	void imGuiMenuSetting();
 
-	bool homework3;
+	// options
 	bool triangleFrame;
 	bool circleFrame;
-	float radius;
 	bool filledTri;
+	// input Vars
+	int centerInt[2];
+	int radiusInt;
+	// tri
+	int point1[2];
+	int point2[2];
+	int point3[2];
 private:
-	float triangleVertex[6];
+	// const
+	float color[3] = { 1.0f, 0, 0 };
 	int shaderProgram;
-	float center[2];	
+	// triangle
+	float triangleVertex[6];
+	float top, bottom, left, right;
+	// circle
+	float center[2];
+	float radius;
+	// basic Methods
 	void drawPoint(const float location[3], const float color[3], const int & VAO, const int &VBO);
 	void drawLine(const float startPoint[2], const float endPoint[2], const int & VAO, const int &VBO);
-	float color[3] = { 1.0f, 0, 0 };
+	// draw circle
 	float judgePosReltoCircle(const float & x, const float & y);
 	void draw8points(const float & x, const float & y);
-	void initBools();
+	// fill Tri
 	bool isInTri(const float & x, const float & y, const float * edge1, const float * edge2, const float * edge3);
+	void initVars();
+	void initBound();
+	
 };
 

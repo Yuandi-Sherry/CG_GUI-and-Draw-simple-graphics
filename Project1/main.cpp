@@ -64,36 +64,9 @@ int main() {
 			// 检查触发事件、更新窗口，回调
 			glfwPollEvents();
 			displayGUI(window, homework2, homework3);
-			if (homework2.homework2) {
-				if (homework2.bonus) {
-					if (homework2.rectangle) {
-						homework2.displayRec();
-					}
-					if (homework2.severalTri)
-						homework2.displaySeveralTriangle();
-				}
-				// 指定三角形顶点和颜色
-				if (homework2.triangle) {
-					homework2.displayTriangle();
-				}
-				if (homework2.point) {
-					homework2.displayPoint();
-				}
-				if (homework2.line) {
-					homework2.displayLine();
-				}
-			}
-			if (homework3.homework3) {
-				if (homework3.circleFrame) {
-					homework3.drawCircle();
-				}
-				if (homework3.triangleFrame) {
-					homework3.drawTriangle();
-				}
-				if (homework3.filledTri) {
-					homework3.fillTriangle();
-				}
-			}
+			
+			homework2.displayController();
+			homework3.displayController();
 			glfwMakeContextCurrent(window);
 			// 交换缓冲、绘制、显示
 			glfwSwapBuffers(window);
@@ -104,8 +77,7 @@ int main() {
 	}
 	catch (const char* msg) {
 		cerr << msg << endl;
-	}
-	
+	}	
 	return 0;
 }
 
@@ -231,38 +203,41 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 	// 颜色选择窗口细节
-	ImGui::Begin("Color Setting");
-	ImGui::Checkbox("Homework2", &homework2.homework2);
-	ImGui::Checkbox("Homework3", &homework3.homework3);
-	if (homework3.homework3) {
-		ImGui::Checkbox("Triangle Frame", &homework3.triangleFrame);
-		ImGui::Checkbox("Circle Frame", &homework3.circleFrame);
-		int temp = 1200;
-		ImGui::Checkbox("Filled Triangle", &homework3.filledTri);
-		ImGui::InputInt("Radius", &temp);
-		homework3.radius = (float)temp / windowWidth;
-		homework2.homework2 = false;
+	ImGui::Begin("Options", NULL, ImGuiWindowFlags_MenuBar);
+	if (ImGui::BeginMenuBar())
+	{
+		homework2.imGuiMenuSetting();
+		homework3.imGuiMenuSetting();
+		ImGui::EndMenuBar();
 	}
+	homework2.imGuiSetting();
+	homework3.imGuiSetting();
+	//if (homework3.homework3) {
+	//	ImGui::Checkbox("Triangle Frame", &homework3.triangleFrame);
+	//	ImGui::Checkbox("Circle Frame", &homework3.circleFrame);
+	//	
+	//	homework2.homework2 = false;
+	//}
 
-	if (homework2.homework2) {
-		ImGui::Checkbox("Triangle", &homework2.triangle);
-		ImGui::ColorEdit3("Triangle color", (float*)&homework2.triangleColor);
-		ImGui::Checkbox("Point", &homework2.point);
-		ImGui::Checkbox("Line", &homework2.line);
-		ImGui::Checkbox("Bonus", &homework2.bonus);
-		if (homework2.bonus) {
-			ImGui::Checkbox("Square", &homework2.rectangle);
-			ImGui::Checkbox("Several Triangle", &homework2.severalTri);
-		}
-		homework3.homework3 = false;
-	}
+	//if (homework2.homework2) {
+	//	ImGui::Checkbox("Triangle", &homework2.triangle);
+	//	ImGui::ColorEdit3("Triangle color", (float*)&homework2.triangleColor);
+	//	ImGui::Checkbox("Point", &homework2.point);
+	//	ImGui::Checkbox("Line", &homework2.line);
+	//	ImGui::Checkbox("Bonus", &homework2.bonus);
+	//	if (homework2.bonus) {
+	//		ImGui::Checkbox("Square", &homework2.rectangle);
+	//		ImGui::Checkbox("Several Triangle", &homework2.severalTri);
+	//	}
+	//	homework3.homework3 = false;
+	//}
 	ImGui::End();
 	// Rendering
 	ImGui::Render();
 	int display_w, display_h;
 	glfwMakeContextCurrent(window);
 	glfwGetFramebufferSize(window, &display_w, &display_h);
-	glViewport(0, 0, display_w, display_h);
+	glViewport(-1, 1, display_w, display_h);
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

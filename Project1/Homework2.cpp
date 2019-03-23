@@ -216,3 +216,48 @@ void Homework2::initBool() {
 	severalTri = false;
 	dirty = false;
 }
+
+void Homework2::displayController() {
+	if (rectangle) {
+		displayRec();
+	}
+	if (severalTri)
+		displaySeveralTriangle();
+
+	// 指定三角形顶点和颜色
+	if (triangle) {
+		displayTriangle();
+	}
+	if (point) {
+		displayPoint();
+	}
+	if (line) {
+		displayLine();
+	}
+}
+
+void Homework2::imGuiMenuSetting() {
+	if (ImGui::BeginMenu("Homework2"))
+	{
+		if (ImGui::BeginMenu("Basic"))
+		{
+			ImGui::MenuItem("Triangle", NULL, &triangle);
+			ImGui::MenuItem("Point", NULL, &point);
+			ImGui::MenuItem("Line", NULL, &line);
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Bonus"))
+		{
+			ImGui::MenuItem("Rectangle", NULL, &rectangle);
+			ImGui::MenuItem("Several Triangles", NULL, &severalTri);
+			ImGui::EndMenu();
+		}
+		ImGui::EndMenu();
+	}
+}
+
+void Homework2::imGuiSetting() {
+	if (triangle) {
+		ImGui::ColorEdit3("Triangle color", (float*)&triangleColor);
+	}
+}

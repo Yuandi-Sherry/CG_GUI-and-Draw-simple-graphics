@@ -28,6 +28,9 @@ public:
 	bool rectangle;
 	bool severalTri;
 	ImVec4 triangleColor = ImVec4(-1.0f, -1.0f, -1.0f, 1.00f);
+	void displayController();
+	void imGuiSetting();
+	void imGuiMenuSetting();
 private:
 	int shaderProgram;
 	void initBool();
