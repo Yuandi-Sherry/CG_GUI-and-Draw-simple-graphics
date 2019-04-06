@@ -35,5 +35,6 @@ public:
 private:
 	void initBool();	
 	bool dirty; // 修改三角形颜色
+	int shaderProgram;
 };
 
