@@ -6,21 +6,20 @@
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include <string>
+#include "Shader.h"
 using namespace std;
 class ShaderProgram
 {
 public:
-	ShaderProgram(const string & vsFile, const string & fsFile);
+	ShaderProgram(const int & vShader, const int & fShader);
 	~ShaderProgram();
+	void checkCompile(const int & shaderProgram);
 	unsigned int getShaderProgram() {
 		return shaderProgram;
 	}
 	
 private:
 	unsigned int shaderProgram;
-	void compileShader(unsigned int & shader, const string & filename, const int & shaderType);
-	bool readFile(const string & fileName, string & content);
 
-	void checkCompile(const int & shader, const int & checkType);
 };
 #endif // !ShaderProgram

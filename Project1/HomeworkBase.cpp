@@ -1,7 +1,8 @@
 #include "HomeworkBase.h"
 HomeworkBase::HomeworkBase(const string & vertexShaderFile, const string & fragmentShaderFile)
 {
-	ShaderProgram shaderProgramIns(vertexShaderFile, fragmentShaderFile);
+	Shader shaders(vertexShaderFile, fragmentShaderFile);
+	ShaderProgram shaderProgramIns(shaders.getVertexShader(), shaders.getFragmentShader());
 	shaderProgram = shaderProgramIns.getShaderProgram();
 }
 

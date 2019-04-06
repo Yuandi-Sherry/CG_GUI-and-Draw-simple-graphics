@@ -29,9 +29,12 @@ static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
-// 着色器文件
+// 颜色着色器文件
 const string vertexShaderFile = "shader.vs";
 const string fragmentShaderFile = "shader.fs";
+// 纹理着色器文件
+const string vertexShaderFile_texture = "texture_shader.vs";
+const string fragmentShaderFile_texture = "texture_shader.fs";
 const char* glsl_version = "#version 130";
 // 清屏颜色
 ImVec4 clear_color = ImVec4(0, 0, 0, 1.00f);
@@ -42,12 +45,10 @@ int main() {
 		// --------------- 编译顶点、片段着色器 --------------- 
 		
 		// --------------- 着色器程序 --------------- 
-		ShaderProgram shPro(vertexShaderFile, fragmentShaderFile);
-		unsigned int shaderProgram = shPro.getShaderProgram();
 		// 新建作业对象
 		Homework2 homework2(vertexShaderFile, fragmentShaderFile);
 		Homework3 homework3(vertexShaderFile, fragmentShaderFile);
-		Homework4 homework4(shaderProgram);
+		Homework4 homework4(vertexShaderFile, fragmentShaderFile);
 		
 		// 渲染循环
 		// 每次循环开始前检查GLFW是否被退出
@@ -58,6 +59,7 @@ int main() {
 			// 作业对象的显示控制
 			homework2.displayController();
 			homework3.displayController();
+			homework4.displayController();
 			glfwMakeContextCurrent(window);
 			// 交换缓冲、绘制、显示
 			glfwSwapBuffers(window);

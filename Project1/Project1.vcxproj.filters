@@ -16,46 +16,58 @@
     <Filter Include="头文件\imGUI">
       <UniqueIdentifier>{28949628-1885-443b-9f1d-670f0855d880}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\imGUI">
+      <UniqueIdentifier>{019e1768-28c3-4f86-9c63-88728b07ac7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\preHm">
+      <UniqueIdentifier>{6143872e-9965-4001-aeae-08fbd1825595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\preHm">
+      <UniqueIdentifier>{300b6101-309f-46ce-807b-155e9d4e9921}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="glad.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_draw.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_widgets.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_demo.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_opengl3.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_glfw.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Homework3.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Homework2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Homework4.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderProgram.cpp">
-      <Filter>头文件</Filter>
+    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui.cpp">
+      <Filter>源文件\imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_demo.cpp">
+      <Filter>源文件\imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_draw.cpp">
+      <Filter>源文件\imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_glfw.cpp">
+      <Filter>源文件\imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_opengl3.cpp">
+      <Filter>源文件\imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_widgets.cpp">
+      <Filter>源文件\imGUI</Filter>
     </ClCompile>
     <ClCompile Include="HomeworkBase.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\preHm</Filter>
+    </ClCompile>
+    <ClCompile Include="Homework3.cpp">
+      <Filter>源文件\preHm</Filter>
+    </ClCompile>
+    <ClCompile Include="Homework2.cpp">
+      <Filter>源文件\preHm</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>源文件\preHm</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>源文件\preHm</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>源文件\preHm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,12 +85,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Homework3.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Homework2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Homework4.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -106,11 +112,20 @@
     <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_truetype.h">
       <Filter>头文件\imGUI</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderProgram.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="Homework2.h">
+      <Filter>头文件\preHm</Filter>
+    </ClInclude>
+    <ClInclude Include="Homework3.h">
+      <Filter>头文件\preHm</Filter>
     </ClInclude>
     <ClInclude Include="HomeworkBase.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\preHm</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>头文件\preHm</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>头文件\preHm</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

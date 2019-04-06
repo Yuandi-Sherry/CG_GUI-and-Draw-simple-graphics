@@ -5,11 +5,15 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 color;
 
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 out vec3 ourColor;
 
 void main() {
 	// 内置变量，保存顶点位置的齐次坐标，第四个分量为透明度
-	gl_Position = vec4(aPos, 1.0);
+	gl_Position = vec4(aPos, 0.8f);
+	// gl_Position = projection * view * model * vec4(aPos, 1.0f);
 	ourColor = color;
 	gl_PointSize = 100;
 }
