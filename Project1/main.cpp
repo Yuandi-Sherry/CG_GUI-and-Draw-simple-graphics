@@ -17,7 +17,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow * window);
 
 void initGUI(GLFWwindow* window);
-void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3);
+void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3, Homework4 & homework4);
 GLFWwindow* initialize();
 int windowWidth = 1200;
 int windowHeight = 1200;
@@ -49,7 +49,7 @@ int main() {
 		while (!glfwWindowShouldClose(window)) {
 			// 检查触发事件、更新窗口，回调
 			glfwPollEvents();
-			displayGUI(window, homework2, homework3);
+			displayGUI(window, homework2, homework3, homework4);
 			// 作业对象的显示控制
 			homework2.displayController();
 			homework3.displayController();
@@ -138,7 +138,7 @@ void initGUI(GLFWwindow* window) {
 	ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
-void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3) {
+void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3, Homework4 & homework4) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -148,10 +148,12 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 		// 作业GUI显示
 		homework2.imGuiMenuSetting();
 		homework3.imGuiMenuSetting();
+		homework4.imGuiMenuSetting();
 		ImGui::EndMenuBar();
 	}
 	homework2.imGuiSetting();
 	homework3.imGuiSetting();
+	homework4.imGuiSetting();
 
 	ImGui::End();
 	// Rendering
