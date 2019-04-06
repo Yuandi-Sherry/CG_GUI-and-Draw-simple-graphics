@@ -4,14 +4,15 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include "HomeworkBase.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 using namespace std;
-class Homework2
+class Homework2 : public HomeworkBase
 {
 public:
-	Homework2(const int & shaderProgram);
+	Homework2(const string & vertexShaderFile, const string & fragmentShaderFile);
 	~Homework2();
 	void displayPoint();
 	void displayLine();
@@ -32,9 +33,7 @@ public:
 	void imGuiSetting();
 	void imGuiMenuSetting();
 private:
-	int shaderProgram;
-	void initBool();
-	
+	void initBool();	
 	bool dirty; // 修改三角形颜色
 };
 

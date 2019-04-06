@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\imGUI">
+      <UniqueIdentifier>{28949628-1885-443b-9f1d-670f0855d880}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,6 +48,15 @@
     <ClCompile Include="Homework2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Homework4.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="HomeworkBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.vs">
@@ -53,36 +65,51 @@
     <None Include="shader.fs">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="texture_shader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="texture_shader.fs">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imconfig.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_truetype.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_rectpack.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_textedit.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_glfw.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_opengl3.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_internal.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Homework3.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Homework2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Homework4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imconfig.h">
+      <Filter>头文件\imGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui.h">
+      <Filter>头文件\imGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_glfw.h">
+      <Filter>头文件\imGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_opengl3.h">
+      <Filter>头文件\imGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_internal.h">
+      <Filter>头文件\imGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_rectpack.h">
+      <Filter>头文件\imGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_textedit.h">
+      <Filter>头文件\imGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_truetype.h">
+      <Filter>头文件\imGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="HomeworkBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

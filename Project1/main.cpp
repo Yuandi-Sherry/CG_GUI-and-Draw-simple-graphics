@@ -8,7 +8,8 @@
 #include "imgui_impl_opengl3.h"
 #include "Homework2.h"
 #include "Homework3.h"
-#include <stdio.h>
+#include "Homework4.h"
+#include "ShaderProgram.h"
 #define N 888
 using namespace std;
 
@@ -29,8 +30,8 @@ static void glfw_error_callback(int error, const char* description)
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 // 着色器文件
-const char* vertexShaderFile = "shader.vs";
-const char* fragmentShaderFile = "shader.fs";
+const string vertexShaderFile = "shader.vs";
+const string fragmentShaderFile = "shader.fs";
 const char* glsl_version = "#version 130";
 // 清屏颜色
 ImVec4 clear_color = ImVec4(0, 0, 0, 1.00f);
@@ -39,24 +40,14 @@ int main() {
 	try {
 		GLFWwindow* window = initialize();
 		// --------------- 编译顶点、片段着色器 --------------- 
-		unsigned int vertexShader;
-		compileShader(vertexShader, vertexShaderFile, GL_VERTEX_SHADER);
-		unsigned int fragmentShader;
-		compileShader(fragmentShader, fragmentShaderFile, GL_FRAGMENT_SHADER);
+		
 		// --------------- 着色器程序 --------------- 
-		unsigned int shaderProgram;
-		// 创建程序，返回ID引用
-		shaderProgram = glCreateProgram();
-		// 链接
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		glLinkProgram(shaderProgram);
-		checkCompile(shaderProgram, 2);
-		// 激活程序对象
-		glUseProgram(shaderProgram);
+		ShaderProgram shPro(vertexShaderFile, fragmentShaderFile);
+		unsigned int shaderProgram = shPro.getShaderProgram();
 		// 新建作业对象
-		Homework2 homework2(shaderProgram);
-		Homework3 homework3(shaderProgram);
+		Homework2 homework2(vertexShaderFile, fragmentShaderFile);
+		Homework3 homework3(vertexShaderFile, fragmentShaderFile);
+		Homework4 homework4(shaderProgram);
 		
 		// 渲染循环
 		// 每次循环开始前检查GLFW是否被退出
@@ -124,67 +115,16 @@ void processInput(GLFWwindow * window) {
 		glfwSetWindowShouldClose(window, true);
 	}
 }
-/*
- * 文件读取
- */
-bool readFile(const string & fileName, string & content) {
-	ifstream inFile(fileName);
-	if (!inFile) {
-		cout << "Fail to read " << fileName.c_str() << endl;
-		return false;
-	}
-	else {
-		string line;
-		while (getline(inFile, line)) {
-			content.append(line);
-			content.append("\n");
-		}
-	}
-	return true;
-}
 
-void checkCompile(const int & shader, const int & checkType) {
-	int success;
-	char info[512];
-	if (checkType == 1) {
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-		if (!success) {
-			cout << "COMPILE ERROR: " << endl;
-			glGetShaderInfoLog(shader, 512, NULL, info);
-			cout << info << endl;
-		}
-	}
-	else if (checkType == 2) {
-		glGetProgramiv(shader, GL_LINK_STATUS, &success);
-		if (!success) {
-			cout << "COMPILE ERROR: " << endl;
-			glGetProgramInfoLog(shader, 512, NULL, info);
-			cout << info << endl;
-		}
-	}
-}
+
+
 /*
  * 编译着色器
  @shader 着色器
  @filename 着色器文件名
  @type 着色器类别 1->vertex, 2->fragment
  */
-void compileShader(unsigned int & shader, const char * filename, const int & shaderType) {
-	shader = glCreateShader(shaderType);
-	string shaderSource;
-	if (readFile(filename, shaderSource)) {
-		const GLchar* p[1];
-		p[0] = shaderSource.c_str();
-		GLint Lengths[1];
-		Lengths[0] = strlen(shaderSource.c_str());
-		glShaderSource(shader, 1, p, Lengths);
-		glCompileShader(shader);
-		checkCompile(shader, 1);
-	}
-	else {
-		cout << "Fail to read shader file" << endl;
-	}
-}
+
 
 void initGUI(GLFWwindow* window) {
 	// set up GUI context

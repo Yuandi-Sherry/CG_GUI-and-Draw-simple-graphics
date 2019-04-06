@@ -7,12 +7,15 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <cmath>
-class Homework3
+#include <string>
+#include "HomeworkBase.h"
+using namespace std;
+class Homework3 : public HomeworkBase
 {
 public:
-	Homework3(const int vertices[6], const int & shaderProgram);
-	Homework3(const int & centerX, const int & centerY, const int & radius, const int & shaderProgram);
-	Homework3(const int & shaderProgram);
+	Homework3(const int vertices[6], const string & vertexShaderFile, const string & fragmentShaderFile);
+	Homework3(const int & centerX, const int & centerY, const int & radius, const string & vertexShaderFile, const string & fragmentShaderFile);
+	Homework3(const string & vertexShaderFile, const string & fragmentShaderFile);
 	~Homework3() {
 
 	}
@@ -39,7 +42,6 @@ public:
 private:
 	// const
 	float color[3] = { 1.0f, 0, 0 };
-	int shaderProgram;
 	int top, bottom, left, right;
 	// basic Methods
 	void drawPoint(const float location[3], const float color[3], const int & VAO);

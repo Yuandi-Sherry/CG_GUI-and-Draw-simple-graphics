@@ -2,28 +2,25 @@
 using namespace std;
 extern int windowWidth;
 extern int windowHeight;
-Homework3::Homework3(const int vertices[6], const int & shaderProgram)
+Homework3::Homework3(const int vertices[6], const string & vertexShaderFile, const string & fragmentShaderFile) : HomeworkBase(vertexShaderFile, fragmentShaderFile)
 {
 	initVars();
-	this->shaderProgram = shaderProgram;
 	setTriangle(vertices[0], vertices[1], vertices[2], vertices[3], vertices[4], vertices[5]);
 	setCircle();
 	initBound();
 }
 
-Homework3::Homework3(const int & centerX, const int & centerY, const int & radius, const int & shaderProgram)
+Homework3::Homework3(const int & centerX, const int & centerY, const int & radius, const string & vertexShaderFile, const string & fragmentShaderFile) :HomeworkBase(vertexShaderFile, fragmentShaderFile)
 {
 	initVars();
-	this->shaderProgram = shaderProgram;
 	setCircle(centerX, centerY, radius);
 	setTriangle();
 	initBound();
 }
 
-Homework3::Homework3(const int & shaderProgram)
+Homework3::Homework3(const string & vertexShaderFile, const string & fragmentShaderFile) :HomeworkBase(vertexShaderFile, fragmentShaderFile)
 {
 	initVars();
-	this->shaderProgram = shaderProgram;
 	setCircle();
 	setTriangle();
 	initBound();

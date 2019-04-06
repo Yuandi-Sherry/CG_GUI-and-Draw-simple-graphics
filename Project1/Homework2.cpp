@@ -1,7 +1,6 @@
 #include "Homework2.h"
-Homework2::Homework2(const int & shaderProgram)
+Homework2::Homework2(const string & vertexShaderFile, const string & fragmentShaderFile):HomeworkBase(vertexShaderFile, fragmentShaderFile)
 {
-	this->shaderProgram = shaderProgram;
 	initBool();
 }
 

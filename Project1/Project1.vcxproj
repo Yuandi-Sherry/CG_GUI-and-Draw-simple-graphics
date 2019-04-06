@@ -122,13 +122,18 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="Homework2.cpp" />
     <ClCompile Include="Homework3.cpp" />
+    <ClCompile Include="Homework4.cpp" />
+    <ClCompile Include="HomeworkBase.cpp" />
     <ClCompile Include="imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui_impl_opengl3.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.fs" />
     <None Include="shader.vs" />
+    <None Include="texture_shader.fs" />
+    <None Include="texture_shader.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imconfig.h" />
@@ -139,8 +144,11 @@
     <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_truetype.h" />
     <ClInclude Include="Homework2.h" />
     <ClInclude Include="Homework3.h" />
+    <ClInclude Include="Homework4.h" />
+    <ClInclude Include="HomeworkBase.h" />
     <ClInclude Include="imgui_impl_glfw.h" />
     <ClInclude Include="imgui_impl_opengl3.h" />
+    <ClInclude Include="ShaderProgram.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
