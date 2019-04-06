@@ -94,6 +94,9 @@ GLFWwindow* initialize() {
 		throw "fail to load glad";
 	}
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	// init GUI
 	initGUI(window);
 	return window;
@@ -160,4 +163,5 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 }
