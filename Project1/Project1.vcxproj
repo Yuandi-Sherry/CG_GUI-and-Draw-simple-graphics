@@ -131,6 +131,8 @@
     <ClCompile Include="ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="coor_shader.fs" />
+    <None Include="coor_shader.vs" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />
     <None Include="texture_shader.fs" />

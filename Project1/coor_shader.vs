@@ -11,7 +11,8 @@ uniform mat4 projection;
 out vec3 ourColor;
 
 void main() {
-	gl_Position = vec4(aPos,1.0f);
+	// 内置变量，保存顶点位置的齐次坐标，第四个分量为透明度
+	gl_Position = model * vec4(aPos, 1.0f);
 	ourColor = color;
 	gl_PointSize = 100;
 }

@@ -2,9 +2,12 @@
 HomeworkBase::HomeworkBase(const string & vertexShaderFile, const string & fragmentShaderFile)
 {
 	Shader shaders(vertexShaderFile, fragmentShaderFile);
-	ShaderProgram shaderProgramIns(shaders.getVertexShader(), shaders.getFragmentShader());
+	vertexShader = shaders.getVertexShader();
+	fragmentShader = shaders.getFragmentShader();
+	shaderProgramIns.setShaders(vertexShader, fragmentShader);
 	shaderProgram = shaderProgramIns.getShaderProgram();
 }
+
 
 HomeworkBase::~HomeworkBase()
 {

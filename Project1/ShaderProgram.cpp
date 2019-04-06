@@ -1,25 +1,16 @@
-#include "ShaderProgram.h"
-
-
+Ôªø#include "ShaderProgram.h"
 ShaderProgram::ShaderProgram(const int & vertexShader, const int & fragmentShader)
 {
-	shaderProgram = glCreateProgram();
-	// ¡¥Ω”
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-	checkCompile(shaderProgram);
-	// º§ªÓ≥Ã–Ú∂‘œÛ
-	glUseProgram(shaderProgram);
+	setShaders(vertexShader, fragmentShader);
 }
 
 ShaderProgram::~ShaderProgram()
 {
 }
 
-
-
-
+void ShaderProgram::useProgram() {
+	glUseProgram(shaderProgram);
+}
 
 void ShaderProgram::checkCompile(const int & shader) {
 	int success;
@@ -30,4 +21,14 @@ void ShaderProgram::checkCompile(const int & shader) {
 		glGetProgramInfoLog(shader, 512, NULL, info);
 		cout << info << endl;
 	}
+}
+
+void ShaderProgram::setShaders(const int & vertexShader, const int & fragmentShader) {
+	shaderProgram = glCreateProgram();
+	// √Å¬¥¬Ω√ì
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
+	checkCompile(shaderProgram);
+
 }

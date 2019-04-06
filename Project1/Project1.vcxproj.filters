@@ -83,6 +83,12 @@
     <None Include="texture_shader.fs">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="coor_shader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="coor_shader.fs">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Homework4.h">

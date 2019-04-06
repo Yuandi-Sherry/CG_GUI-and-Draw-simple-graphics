@@ -15,9 +15,6 @@ using namespace std;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow * window);
-bool readFile(const string & fileName, string & content);
-void checkCompile(const int & shader, const int & checkType);
-void compileShader(unsigned int & shader, const char * filename, const int & shaderType);
 
 void initGUI(GLFWwindow* window);
 void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3);
@@ -42,13 +39,10 @@ ImVec4 clear_color = ImVec4(0, 0, 0, 1.00f);
 int main() {
 	try {
 		GLFWwindow* window = initialize();
-		// --------------- 编译顶点、片段着色器 --------------- 
-		
-		// --------------- 着色器程序 --------------- 
 		// 新建作业对象
 		Homework2 homework2(vertexShaderFile, fragmentShaderFile);
 		Homework3 homework3(vertexShaderFile, fragmentShaderFile);
-		Homework4 homework4(vertexShaderFile, fragmentShaderFile);
+		Homework4 homework4("coor_shader.vs", "coor_shader.fs");
 		
 		// 渲染循环
 		// 每次循环开始前检查GLFW是否被退出
@@ -99,6 +93,7 @@ GLFWwindow* initialize() {
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		throw "fail to load glad";
 	}
+	glEnable(GL_DEPTH_TEST);
 	// init GUI
 	initGUI(window);
 	return window;

@@ -11,5 +11,8 @@ public:
 	~HomeworkBase();
 protected:
 	int shaderProgram;
+	int vertexShader;
+	int fragmentShader;
+	ShaderProgram shaderProgramIns;
 };
 

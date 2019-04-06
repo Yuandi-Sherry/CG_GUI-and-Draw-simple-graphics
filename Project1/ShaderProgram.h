@@ -12,12 +12,17 @@ class ShaderProgram
 {
 public:
 	ShaderProgram(const int & vShader, const int & fShader);
+	ShaderProgram() {
+
+	}
 	~ShaderProgram();
 	void checkCompile(const int & shaderProgram);
 	unsigned int getShaderProgram() {
 		return shaderProgram;
 	}
-	
+	void useProgram();
+	void setShaders(const int & vShader, const int & fShader);
+
 private:
 	unsigned int shaderProgram;
 
