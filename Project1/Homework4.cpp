@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stb_image.h>
-
+#define TRANSFACTOR 0.1
 using namespace std;
 extern int windowWidth;
 extern int windowHeight;
@@ -37,12 +37,18 @@ void Homework4::drawCube() {
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
 	view = glm::translate(view, glm::vec3(translateX, translateY, translateZ));
+	if (translation) {
+		translateX += transFactorX * TRANSFACTOR;
+		translateY += transFactorY * TRANSFACTOR;
+		translateZ += transFactorZ * TRANSFACTOR;
+		view = glm::translate(view, glm::vec3(translateX, translateY, translateZ));
+	}
+		
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
 
-	glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, position);
+	
 	if(rotation)
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(1.0f, 0.0f, 1.0f));
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
@@ -73,35 +79,28 @@ void Homework4::imGuiSetting() {
 	// 变换的是view
 	if (translation) {
 		ImGui::Text("Translation");
-		ImGui::SliderFloat("X", &translateX, -50, 50);
-		ImGui::SliderFloat("Y", &translateY, -50, 50);
-		ImGui::SliderFloat("Z", &translateZ, -50, 50);
+		ImGui::SliderFloat("X", &transFactorX, -1, 1);
+		ImGui::SliderFloat("Y", &transFactorY, -1, 1);
+		ImGui::SliderFloat("Z", &transFactorZ, -1, 1);
 	}
 	// 变换的是model
 	if (scaling) {
 		ImGui::Text("Scaling");
-		ImGui::SliderFloat("Scalar", &scalar, 0.001, 10);
+		ImGui::SliderFloat("Scalar", &scalar, 0.9, 1.1);
 		for (int i = 0; i < 36; i++) {
 			for (int j = 0; j < 3; j++) {
-				cubeVertices[i * 6 + j] = (double)length * scalar * cubeVertices[i * 6 + j] / abs(cubeVertices[i * 6 + j]);
+				cubeVertices[i * 6 + j] *= (double)scalar;
 			}
 		}
 	}
 	
 }
 void Homework4::imGuiMenuSetting() {
-	if (ImGui::BeginMenu("Homework4"))
-	{
-		if (ImGui::BeginMenu("Basic"))
-		{
-			
+	if (ImGui::BeginMenu("Homework4")) {
+		if (ImGui::BeginMenu("Basic")){
 			ImGui::MenuItem("Translation", NULL, &translation);
 			ImGui::MenuItem("Rotation", NULL, &rotation);
 			ImGui::MenuItem("Scaling", NULL, &scaling);
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Bonus"))
-		{
 			ImGui::EndMenu();
 		}
 		ImGui::EndMenu();
@@ -115,9 +114,6 @@ void Homework4::initVars() {
 	translateY = 0.0f;
 	translateZ = -20.0f;
 	rotation = false;
-	rotateX = false;
-	rotateY = false;
-	rotateZ = false;
 	scaling = false;
 	scalar = 1.0f;
 }

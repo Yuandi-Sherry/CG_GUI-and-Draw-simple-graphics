@@ -1,4 +1,6 @@
 #pragma once
+#ifndef _shader_h_
+#define _shader_h_
 #include <string>
 #include <iostream>
 #include <glad/glad.h>
@@ -24,4 +26,4 @@ private:
 	unsigned int vertexShader;
 	unsigned int fragmentShader;
 };
-
+#endif

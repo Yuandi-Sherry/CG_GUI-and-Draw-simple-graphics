@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _shader_h_
-#define _shader_h_
+#ifndef _shader_program_h_
+#define _shader_program_h_
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

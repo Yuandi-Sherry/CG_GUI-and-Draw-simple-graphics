@@ -18,30 +18,37 @@ public:
 
 private:
 	bool homework4;
+	// basic part
+	// the length of the cube
 	float length = 2.0f;
+	// initial position in world coordinate
+	float transFactorX = 0.0f;
+	float transFactorY = 0.0f;
+	float transFactorZ = 0.0f;
+
 	float cubeVertices [216] = {
-		// red
+		// red z = -2
 		-2.0f, -2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
 		 2.0f, -2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
 		 2.0f,  2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
 		 2.0f,  2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
 		-2.0f,  2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
 		-2.0f, -2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
-		// purple
+		// purple z = 2
 		-2.0f, -2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
 		 2.0f, -2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
 		 2.0f,  2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
 		 2.0f,  2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
 		-2.0f,  2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
 		-2.0f, -2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
-		// qing
+		// yellow z = 
 		-2.0f,  2.0f,  2.0f,  1.0f, 1.0f, 0.0f,
 		-2.0f,  2.0f, -2.0f,  1.0f, 1.0f, 0.0f,
 		-2.0f, -2.0f, -2.0f,  1.0f, 1.0f, 0.0f,
 		-2.0f, -2.0f, -2.0f,  1.0f, 1.0f, 0.0f,
 		-2.0f, -2.0f,  2.0f,  1.0f, 1.0f, 0.0f,
 		-2.0f,  2.0f,  2.0f,  1.0f, 1.0f, 0.0f,
-		// blue
+		// blue z = 
 		 2.0f,  2.0f,  2.0f,  0.0f, 0.0f, 1.0f,
 		 2.0f,  2.0f, -2.0f,  0.0f, 0.0f, 1.0f,
 		 2.0f, -2.0f, -2.0f,  0.0f, 0.0f, 1.0f,
@@ -55,7 +62,7 @@ private:
 		 2.0f, -2.0f,  2.0f,  0.0f, 1.0f, 0.0f,
 		-2.0f, -2.0f,  2.0f,  0.0f, 1.0f, 0.0f,
 		-2.0f, -2.0f, -2.0f,  0.0f, 1.0f, 0.0f,
-		// yellow
+		// qing
 		-2.0f,  2.0f, -2.0f,  0.0f, 1.0f, 1.0f,
 		 2.0f,  2.0f, -2.0f,  0.0f, 1.0f, 1.0f,
 		 2.0f,  2.0f,  2.0f,  0.0f, 1.0f, 1.0f,
@@ -69,11 +76,10 @@ private:
 	float translateY;
 	float translateZ;
 	bool rotation;
-	bool rotateX;
-	bool rotateY;
-	bool rotateZ;
 	bool scaling;
 	float scalar;
+
+
 };
 
 

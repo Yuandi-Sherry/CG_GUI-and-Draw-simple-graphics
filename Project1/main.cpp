@@ -80,7 +80,7 @@ GLFWwindow* initialize() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	// ´´½¨´°¿Ú
-	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "CG_HOMEWORK2", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "CG_HOMEWORK", NULL, NULL);
 	if (window == NULL) {
 		glfwTerminate();
 		throw "fail to init window";

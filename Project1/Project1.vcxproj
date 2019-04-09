@@ -76,6 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -115,10 +116,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui.cpp" />
-    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_demo.cpp" />
-    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_draw.cpp" />
-    <ClCompile Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="..\..\..\..\imGUI\imgui.cpp" />
+    <ClCompile Include="..\..\..\..\imGUI\imgui_demo.cpp" />
+    <ClCompile Include="..\..\..\..\imGUI\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\..\imGUI\imgui_widgets.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Homework2.cpp" />
     <ClCompile Include="Homework3.cpp" />
@@ -127,30 +128,32 @@
     <ClCompile Include="imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui_impl_opengl3.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MySphere.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="coor_shader.fs" />
     <None Include="coor_shader.vs" />
+    <None Include="imgui.ini" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />
     <None Include="texture_shader.fs" />
     <None Include="texture_shader.vs" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imconfig.h" />
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui.h" />
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imgui_internal.h" />
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_rectpack.h" />
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_textedit.h" />
-    <ClInclude Include="..\..\..\TestImGUI\TestImGUI\TestImGUI\imstb_truetype.h" />
+    <ClInclude Include="..\..\..\..\imGUI\imgui.h" />
+    <ClInclude Include="..\..\..\..\imGUI\imgui_internal.h" />
+    <ClInclude Include="..\..\..\..\imGUI\imstb_rectpack.h" />
+    <ClInclude Include="..\..\..\..\imGUI\imstb_textedit.h" />
+    <ClInclude Include="..\..\..\..\imGUI\imstb_truetype.h" />
     <ClInclude Include="Homework2.h" />
     <ClInclude Include="Homework3.h" />
     <ClInclude Include="Homework4.h" />
     <ClInclude Include="HomeworkBase.h" />
     <ClInclude Include="imgui_impl_glfw.h" />
     <ClInclude Include="imgui_impl_opengl3.h" />
+    <ClInclude Include="MySphere.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
   </ItemGroup>
