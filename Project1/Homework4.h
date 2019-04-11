@@ -94,7 +94,12 @@ private:
 	float pro_far;
 
 	// ortho
-	
+	float ort_left;
+	float ort_right;
+	float ort_bottom;
+	float ort_top;
+	float ort_near;
+	float ort_far;
 	
 	// bonus part
 	MySphere sun;

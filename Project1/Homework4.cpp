@@ -40,7 +40,7 @@ void Homework4::drawCube() {
 	if(pro)
 		projection = glm::perspective(glm::radians(pro_frov), (float)windowWidth / (float)windowHeight, pro_near, pro_far);
 	else
-		projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+		projection = glm::ortho(ort_left, ort_right, ort_bottom, ort_top, ort_near, ort_far);
 	view = glm::translate(view, glm::vec3(translateX, translateY, translateZ));
 	if (translation) {
 		translateX += transFactorX * TRANSFACTOR;
@@ -90,10 +90,24 @@ void Homework4::imGuiSetting() {
 		}
 	}
 
-	ImGui::Text("Coordinate Transform");
-	ImGui::SliderFloat("Frov", &pro_frov, 0.0f, 90.0f);
-	ImGui::SliderFloat("Near", &pro_near, 0.0f, 10.0f);
-	ImGui::SliderFloat("Far", &pro_far, 10.0f, 100.0f);
+	ImGui::Text("Coordinate Trnsform");
+	ImGui::Checkbox("projection/orthology", &pro);
+	if (pro) {
+		ImGui::Text("perspective projection");
+		ImGui::SliderFloat("Frov", &pro_frov, 0.0f, 90.0f);
+		ImGui::SliderFloat("Near", &pro_near, 0.0f, 10.0f);
+		ImGui::SliderFloat("Far", &pro_far, 10.0f, 100.0f);
+	}
+	else {
+		ImGui::Text("orthology projection");
+		ImGui::SliderFloat("Left", &ort_left, -1000.0f , 1000.0f);
+		ImGui::SliderFloat("Right", &ort_right, -1000.0f, 1000.0f);
+		ImGui::SliderFloat("Bottom", &ort_bottom, -1000.0f, 1000.0f);
+		ImGui::SliderFloat("Top", &ort_top, -1000.0f, 1000.0f);
+		ImGui::SliderFloat("Far", &ort_far, -1000.0f, 1000.0f);
+		ImGui::SliderFloat("Near", &ort_near, -1000.0f, 1000.0f);
+	}
+	
 
 }
 void Homework4::imGuiMenuSetting() {
@@ -122,6 +136,13 @@ void Homework4::initVars() {
 	pro_frov = 45.0f;
 	pro_near = 0.1f;
 	pro_far = 100.0f;
+
+	ort_left = 0.0f;
+	ort_right = 800.0f;
+	ort_bottom = 0.0f;
+	ort_top = 600.0f;
+	ort_near = 0.1f;
+	ort_far = 100.0f;
 }
 
 
