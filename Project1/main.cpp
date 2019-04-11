@@ -10,6 +10,7 @@
 #include "Homework3.h"
 #include "Homework4.h"
 #include "ShaderProgram.h"
+#include "MySphere.h"
 #define N 888
 using namespace std;
 
@@ -42,8 +43,8 @@ int main() {
 		// 新建作业对象
 		Homework2 homework2(vertexShaderFile, fragmentShaderFile);
 		Homework3 homework3(vertexShaderFile, fragmentShaderFile);
-		Homework4 homework4("coor_shader.vs", "coor_shader.fs");
-		
+		Homework4 homework4(vertexShaderFile_texture, fragmentShaderFile_texture);
+		homework4.prepareCosmos();
 		// 渲染循环
 		// 每次循环开始前检查GLFW是否被退出
 		while (!glfwWindowShouldClose(window)) {
@@ -53,7 +54,8 @@ int main() {
 			// 作业对象的显示控制
 			homework2.displayController();
 			homework3.displayController();
-			homework4.displayController();
+			//homework4.displayController();
+			homework4.displayCosmos();
 			glfwMakeContextCurrent(window);
 			// 交换缓冲、绘制、显示
 			glfwSwapBuffers(window);
@@ -94,8 +96,8 @@ GLFWwindow* initialize() {
 		throw "fail to load glad";
 	}
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// init GUI
 	initGUI(window);

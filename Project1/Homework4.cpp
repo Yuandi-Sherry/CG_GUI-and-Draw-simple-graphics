@@ -1,25 +1,27 @@
-#include <iostream>
+Ôªø#include <iostream>
 #include "Homework4.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stb_image.h>
+
 #define TRANSFACTOR 0.1
 using namespace std;
 extern int windowWidth;
 extern int windowHeight;
+
+
 Homework4::Homework4(const string & vertexShaderFile, const string & fragmentShaderFile) : HomeworkBase(vertexShaderFile, fragmentShaderFile) {
 	shaderProgram = HomeworkBase::shaderProgram;
 	initVars();
 }
 Homework4::~Homework4()
 {
-
 }
 
 void Homework4::drawCube() {
 	unsigned int VBO;
-	unsigned int VAO; // ∂•µ„ ˝◊È∂‘œÛ 
+	unsigned int VAO; // È°∂ÁÇπÊï∞ÁªÑÂØπË±° 
 	glGenBuffers(1, &VBO);
 	glGenVertexArrays(1, &VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -32,7 +34,7 @@ void Homework4::drawCube() {
 	glEnableVertexAttribArray(1);
 
 	shaderProgramIns.useProgram();
-	// º∆À„æÿ’Û
+	// ËÆ°ÁÆóÁü©Èòµ
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
@@ -52,22 +54,13 @@ void Homework4::drawCube() {
 	if(rotation)
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(1.0f, 0.0f, 1.0f));
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
-	// ªÊ÷∆
+	// ÁªòÂà∂
 	shaderProgramIns.useProgram();
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-}
-void Homework4::translate() {
-
-}
-void Homework4::rotate() {
-
-}
-void Homework4::scale() {
-
 }
 
 void Homework4::displayController() {
@@ -76,14 +69,14 @@ void Homework4::displayController() {
 }
 
 void Homework4::imGuiSetting() {
-	// ±‰ªªµƒ «view
+	// ÂèòÊç¢ÁöÑÊòØview
 	if (translation) {
 		ImGui::Text("Translation");
 		ImGui::SliderFloat("X", &transFactorX, -1, 1);
 		ImGui::SliderFloat("Y", &transFactorY, -1, 1);
 		ImGui::SliderFloat("Z", &transFactorZ, -1, 1);
 	}
-	// ±‰ªªµƒ «model
+	// ÂèòÊç¢ÁöÑÊòØmodel
 	if (scaling) {
 		ImGui::Text("Scaling");
 		ImGui::SliderFloat("Scalar", &scalar, 0.9, 1.1);
@@ -116,4 +109,17 @@ void Homework4::initVars() {
 	rotation = false;
 	scaling = false;
 	scalar = 1.0f;
+}
+
+
+void Homework4::prepareCosmos() {
+	sun.setPro(shaderProgram);
+	earth.setPro(shaderProgram);
+	sun.generateSphere(1.0f, "Sun");
+	earth.generateSphere(0.3f, "Earth");
+}
+
+void Homework4::displayCosmos() {
+	// sun.displaySphere();
+	earth.displaySphere();
 }

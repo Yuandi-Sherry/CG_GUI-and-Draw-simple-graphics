@@ -10,4 +10,5 @@ HomeworkBase::HomeworkBase(const string & vertexShaderFile, const string & fragm
 
 HomeworkBase::~HomeworkBase()
 {
+
 }

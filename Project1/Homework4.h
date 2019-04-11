@@ -2,20 +2,28 @@
 #ifndef _Homework_4_
 #define _Homework_4_
 #include "HomeworkBase.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <vector>
+#include "MySphere.h"
 class Homework4 : public HomeworkBase
 {
 public:
 	Homework4(const string & vertexShaderFile, const string & fragmentShaderFile);
 	void drawCube(); // basic1:画一个立方体
-	void translate();
-	void rotate();
-	void scale();
-	void displayController();
+	void generateSphere(const float & radius);
+	void displaySphere();
+	void displayController();;
 	~Homework4();
 	void imGuiSetting();
 	void imGuiMenuSetting();
 	void initVars();
-
+	void parseSphereShaders();
+	void setTexture(char const *filePath);
+	GLuint createTexture(char const *filePath);
+	void displayCosmos();
+	void prepareCosmos();
 private:
 	bool homework4;
 	// basic part
@@ -79,7 +87,10 @@ private:
 	bool scaling;
 	float scalar;
 
-
+	// bonus part
+	MySphere sun;
+	MySphere earth;
+	
 };
 
 
