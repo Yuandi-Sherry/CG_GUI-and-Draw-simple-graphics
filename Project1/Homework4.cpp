@@ -37,7 +37,10 @@ void Homework4::drawCube() {
 	// 计算矩阵
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
-	projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+	if(pro)
+		projection = glm::perspective(glm::radians(pro_frov), (float)windowWidth / (float)windowHeight, pro_near, pro_far);
+	else
+		projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
 	view = glm::translate(view, glm::vec3(translateX, translateY, translateZ));
 	if (translation) {
 		translateX += transFactorX * TRANSFACTOR;
@@ -86,7 +89,12 @@ void Homework4::imGuiSetting() {
 			}
 		}
 	}
-	
+
+	ImGui::Text("Coordinate Transform");
+	ImGui::SliderFloat("Frov", &pro_frov, 0.0f, 90.0f);
+	ImGui::SliderFloat("Near", &pro_near, 0.0f, 10.0f);
+	ImGui::SliderFloat("Far", &pro_far, 10.0f, 100.0f);
+
 }
 void Homework4::imGuiMenuSetting() {
 	if (ImGui::BeginMenu("Homework4")) {
@@ -103,12 +111,17 @@ void Homework4::imGuiMenuSetting() {
 void Homework4::initVars() {
 	homework4 = true;
 	translation = false;
-	translateX = 0.0f;
-	translateY = 0.0f;
-	translateZ = -20.0f;
+	translateX = -1.5f;
+	translateY = 0.5f;
+	translateZ = -1.5f;
 	rotation = false;
 	scaling = false;
 	scalar = 1.0f;
+
+	pro = true;
+	pro_frov = 45.0f;
+	pro_near = 0.1f;
+	pro_far = 100.0f;
 }
 
 

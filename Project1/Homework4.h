@@ -86,7 +86,16 @@ private:
 	bool rotation;
 	bool scaling;
 	float scalar;
+	
+	bool pro;
+	// projec
+	float pro_frov;
+	float pro_near;
+	float pro_far;
 
+	// ortho
+	
+	
 	// bonus part
 	MySphere sun;
 	MySphere earth;

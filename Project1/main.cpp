@@ -43,20 +43,21 @@ int main() {
 		// 新建作业对象
 		Homework2 homework2(vertexShaderFile, fragmentShaderFile);
 		Homework3 homework3(vertexShaderFile, fragmentShaderFile);
-		Homework4 homework4(vertexShaderFile_texture, fragmentShaderFile_texture);
+		Homework4 homework4("coor_shader.vs", "coor_shader.fs");
 		homework4.prepareCosmos();
 		// 渲染循环
 		// 每次循环开始前检查GLFW是否被退出
 		while (!glfwWindowShouldClose(window)) {
 			// 检查触发事件、更新窗口，回调
 			glfwPollEvents();
-			displayGUI(window, homework2, homework3, homework4);
+			glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			// 作业对象的显示控制
 			homework2.displayController();
 			homework3.displayController();
-			//homework4.displayController();
-			homework4.displayCosmos();
-			glfwMakeContextCurrent(window);
+			homework4.displayController();
+			displayGUI(window, homework2, homework3, homework4);
+			//homework4.displayCosmos();
 			// 交换缓冲、绘制、显示
 			glfwSwapBuffers(window);
 		}
@@ -96,8 +97,8 @@ GLFWwindow* initialize() {
 		throw "fail to load glad";
 	}
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// init GUI
 	initGUI(window);
@@ -164,8 +165,7 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 	glfwMakeContextCurrent(window);
 	glfwGetFramebufferSize(window, &display_w, &display_h);
 	glViewport(-1, 1, display_w, display_h);
-	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 }
