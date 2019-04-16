@@ -91,8 +91,7 @@ private:
 	float ort_near;
 	float ort_far;
 	// basic 2
-
-
+	bool viewChanging;
 	// camera
 	glm::vec3 cameraPos;
 	glm::vec3 cameraTarget;

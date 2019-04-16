@@ -39,11 +39,19 @@ void Homework5::drawCube() {
 	//glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::translate(view, glm::vec3(x, y, z));
+	
 	// 透视投影
 	if (per) {
 		// 摄像机
-		/*cameraPos = glm::vec3(0.0f, 0.0f, 3.0f); // 摄像机位置
+		/* */// lookAt旋转
+		view = glm::translate(view, glm::vec3(x, y, z));
+		projection = glm::perspective(glm::radians(pro_frov), (float)windowWidth / (float)windowHeight, pro_near, pro_far);
+	}
+	else
+		projection = glm::ortho(ort_left, ort_right, ort_bottom, ort_top, ort_near, ort_far);
+
+	if (viewChanging) {
+		cameraPos = glm::vec3(0.0f, 0.0f, 3.0f); // 摄像机位置
 		cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f); // 摄影中心
 		cameraDirection = glm::normalize(cameraPos - cameraTarget); // 摄像机方向
 		up = glm::vec3(0.0f, 1.0f, 0.0f); // 定义上方
@@ -54,12 +62,9 @@ void Homework5::drawCube() {
 		float camX = sin(glfwGetTime()) * radius;
 		float camZ = cos(glfwGetTime()) * radius;
 
-		view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); */// lookAt旋转
-		projection = glm::perspective(glm::radians(pro_frov), (float)windowWidth / (float)windowHeight, pro_near, pro_far);
+		view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 	}
-
-	else
-		projection = glm::ortho(ort_left, ort_right, ort_bottom, ort_top, ort_near, ort_far);
+	
 	//view = glm::translate(view, glm::vec3(translateX, translateY, translateZ));
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
@@ -112,6 +117,7 @@ void Homework5::imGuiMenuSetting() {
 	if (ImGui::BeginMenu("Homework5")) {
 		if (ImGui::BeginMenu("Basic")) {
 			ImGui::MenuItem("Coordinate Transform", NULL, &coordinate_transform);
+			ImGui::MenuItem("View Changeing", NULL, &viewChanging);
 			ImGui::EndMenu();
 		}
 		ImGui::EndMenu();
@@ -136,6 +142,8 @@ void Homework5::initVars() {
 	ort_top = 600.0f;
 	ort_near = 0.1f;
 	ort_far = 100.0f;
+
+	viewChanging = true;
 }
 
 
