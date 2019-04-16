@@ -10,13 +10,11 @@ class Homework5 : public HomeworkBase
 {
 public:
 	Homework5(const string & vertexShaderFile, const string & fragmentShaderFile);
-	// basic1 投影
-	void drawCube(); // basic1:画一个立方体
-	// basic2 视角变换
-	// basic3 菜单栏
-	
-	void displayController();
+	Homework5();
 	~Homework5();
+	void init(const string & vertexShaderFile, const string & fragmentShaderFile);
+	void drawCube();
+	void displayController();
 	void imGuiSetting();
 	void imGuiMenuSetting();
 	void initVars();
@@ -24,6 +22,8 @@ public:
 	Camera getCamera() {
 		return camera;
 	}
+	void mouseCallback(GLFWwindow* window, double xpos, double ypos);
+	void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 private:
 	bool homework5;
 	// basic part

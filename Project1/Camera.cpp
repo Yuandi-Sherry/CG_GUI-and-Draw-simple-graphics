@@ -2,17 +2,19 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
+using namespace std;
 // 使用向量初始化
 void Camera::setCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 {
 	// 设置front向量、速度、敏感性、缩放
-	Front = glm::vec3(0.0f, 0.0f, -1.0f);
+	front = glm::vec3(0.0f, 0.0f, -1.0f);
 	movementSpeed = SPEED;
 	MouseSensitivity = SENSITIVITY;
 	Zoom = ZOOM;
 
-	Position = position;
-	WorldUp = up;
+	this->position = position;
+	worldUp = up;
 	Yaw = yaw;
 	Pitch = pitch;
 	updateCameraVectors();
@@ -22,13 +24,13 @@ void Camera::setCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 // 使用scalar value初始化
 void Camera::setCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
 {
-	Front = glm::vec3(0.0f, 0.0f, -1.0f);
+	front = glm::vec3(0.0f, 0.0f, -1.0f);
 	movementSpeed = SPEED;
 	MouseSensitivity = SENSITIVITY;
 	Zoom = ZOOM;
 
-	Position = glm::vec3(posX, posY, posZ);
-	WorldUp = glm::vec3(upX, upY, upZ);
+	position = glm::vec3(posX, posY, posZ);
+	worldUp = glm::vec3(upX, upY, upZ);
 	Yaw = yaw;
 	Pitch = pitch;
 	updateCameraVectors();
@@ -40,35 +42,35 @@ void Camera::updateCameraVectors() {
 	front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
 	front.y = sin(glm::radians(Pitch));
 	front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-	Front = glm::normalize(front);
-	// Also re-calculate the Right and Up vector
-	Right = glm::normalize(glm::cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-	Up = glm::normalize(glm::cross(Right, Front));
+	front = glm::normalize(front);
+	right = glm::normalize(glm::cross(front, worldUp)); 
+	up = glm::normalize(glm::cross(right, front));
 }
 
 glm::mat4 Camera::getViewMatrix() {
-	return glm::lookAt(Position, Position + Front, Up);
+	return glm::lookAt(position, position + front, up);
 }
 
 void Camera::processKeyboard(CameraMovement direction, float deltaTime) {
 	float v = movementSpeed * deltaTime;
 	switch (direction) {
 	case FORWARD:
-		Position += Front * v;
+		position += front * v;
 		break;
 	case BACKWARD:
-		Position -= Front * v;
+		position -= front * v;
 		break;
 	case LEFT:
-		Position += Right * v;
+		position += right * v;
 		break;
 	case RIGHT:
-		Position -= Right * v;
+		position -= right * v;
 		break;
 	}
 }
 
 void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch) {
+	// cout << "move" << endl;
 	xoffset *= MouseSensitivity;
 	yoffset *= MouseSensitivity;
 
@@ -81,11 +83,11 @@ void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPi
 		if (Pitch < -89.0f)
 			Pitch = -89.0f;
 	}
-
 	updateCameraVectors();
 }
 
 void Camera::processMouseScroll(float yoffset) {
+	// cout << "zoom" << endl;
 	if (Zoom >= 1.0f && Zoom <= 45.0f)
 		Zoom -= yoffset;
 	if (Zoom <= 1.0f)

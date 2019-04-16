@@ -8,6 +8,8 @@ class HomeworkBase
 {
 public:
 	HomeworkBase(const string & vsFile, const string & fsFile);
+	HomeworkBase();
+	void init(const string & vsFile, const string & fsFile);
 	~HomeworkBase();
 protected:
 	int shaderProgram;

@@ -16,6 +16,8 @@
 using namespace std;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow * window, Homework5 & homework5);
 
 void initGUI(GLFWwindow* window);
@@ -23,6 +25,13 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 GLFWwindow* initialize();
 int windowWidth = 1200;
 int windowHeight = 1200;
+// homework5 bonus mouse movement
+float yaw = -90.0f;
+float pitch = 0.0f;
+float lastX = 800.0f / 2.0;
+float lastY = 600.0f / 2.0;
+float fov = 45.0f;
+float sensitivity = 0.1f;
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -37,15 +46,22 @@ const string fragmentShaderFile_texture = "texture_shader.fs";
 const char* glsl_version = "#version 130";
 // 清屏颜色
 ImVec4 clear_color = ImVec4(0, 0, 0, 1.00f);
-
+Homework5 homework5;
 int main() {
 	try {
 		GLFWwindow* window = initialize();
+
 		// 新建作业对象
 		Homework2 homework2(vertexShaderFile, fragmentShaderFile);
 		Homework3 homework3(vertexShaderFile, fragmentShaderFile);
 		Homework4 homework4("coor_shader.vs", "coor_shader.fs");
-		Homework5 homework5("coor_shader.vs", "coor_shader.fs");
+		homework5.init("coor_shader.vs", "coor_shader.fs");
+
+		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+		// 鼠标输入相关设置
+		glfwSetCursorPosCallback(window, mouse_callback);
+		glfwSetScrollCallback(window, scroll_callback);
+		// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		// homework4.prepareCosmos();
 		// 渲染循环
 		// 每次循环开始前检查GLFW是否被退出
@@ -95,7 +111,10 @@ GLFWwindow* initialize() {
 	}
 	// 将创建的窗口的上下文设为当前线程的主上下文
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	
+	
+	
 	glfwSwapInterval(1); // Enable vsync
 	// 初始化GLAD，加载系统相关OpenGL函数指针
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -176,4 +195,11 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 	
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+	homework5.mouseCallback(window, xpos, ypos);
+}
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+	homework5.scrollCallback(window, xoffset, yoffset);
 }

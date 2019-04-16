@@ -17,11 +17,11 @@ const float ZOOM = 45.0f;
 class Camera
 {
 public:
-	glm::vec3 Position;
-	glm::vec3 Front;
-	glm::vec3 Up;
-	glm::vec3 Right;
-	glm::vec3 WorldUp;
+	glm::vec3 position;
+	glm::vec3 front;
+	glm::vec3 up;
+	glm::vec3 right;
+	glm::vec3 worldUp;
 
 	float Yaw; 
 	float Pitch;
