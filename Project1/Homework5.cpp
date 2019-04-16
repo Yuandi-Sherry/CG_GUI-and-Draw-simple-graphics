@@ -5,6 +5,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stb_image.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #define TRANSFACTOR 0.1
 using namespace std;
@@ -15,10 +17,12 @@ extern GLFWwindow* window;
 Homework5::Homework5(const string & vertexShaderFile, const string & fragmentShaderFile) : HomeworkBase(vertexShaderFile, fragmentShaderFile) {
 	shaderProgram = HomeworkBase::shaderProgram;
 	initVars();
+	camera.setCamera();
 }
 Homework5::~Homework5()
 {
 }
+
 
 void Homework5::drawCube() {
 	unsigned int VBO;
@@ -118,6 +122,7 @@ void Homework5::imGuiMenuSetting() {
 		if (ImGui::BeginMenu("Basic")) {
 			ImGui::MenuItem("Coordinate Transform", NULL, &coordinate_transform);
 			ImGui::MenuItem("View Changeing", NULL, &viewChanging);
+			ImGui::MenuItem("FPS", NULL, &FPS);
 			ImGui::EndMenu();
 		}
 		ImGui::EndMenu();
@@ -143,20 +148,26 @@ void Homework5::initVars() {
 	ort_near = 0.1f;
 	ort_far = 100.0f;
 
-	viewChanging = true;
+	viewChanging = false;
+
+	FPS = false;
+
 }
 
 
 
 // 接受摄像机的鼠标键盘输入控制
-void Homework5::processInput() {
-	/*	float cameraSpeed = 0.05f; // adjust accordingly
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-			cameraPos += cameraSpeed * cameraFront;
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-			cameraPos -= cameraSpeed * cameraFront;
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-			cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-			cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;*/
+void Homework5::processInput(GLFWwindow * window) {
+	float cameraSpeed = 0.05f; // adjust accordingly
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		cout << "get input W" << endl;
+		camera.processKeyboard(FORWARD, 0.1);
+	}
+		cameraPos += cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		cameraPos -= cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }

@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "Camera.h"
 class Homework5 : public HomeworkBase
 {
 public:
@@ -19,7 +20,10 @@ public:
 	void imGuiSetting();
 	void imGuiMenuSetting();
 	void initVars();
-	void processInput();
+	void processInput(GLFWwindow * window);
+	Camera getCamera() {
+		return camera;
+	}
 private:
 	bool homework5;
 	// basic part
@@ -100,6 +104,11 @@ private:
 	glm::vec3 cameraRight;
 	glm::vec3 cameraUp;
 	glm::vec3 cameraFront;
+
+	// bonus
+	bool FPS;
+	Camera camera;
+
 };
 
 

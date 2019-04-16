@@ -120,6 +120,7 @@
     <ClCompile Include="..\..\..\..\imGUI\imgui_demo.cpp" />
     <ClCompile Include="..\..\..\..\imGUI\imgui_draw.cpp" />
     <ClCompile Include="..\..\..\..\imGUI\imgui_widgets.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Homework2.cpp" />
     <ClCompile Include="Homework3.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="..\..\..\..\imGUI\imstb_rectpack.h" />
     <ClInclude Include="..\..\..\..\imGUI\imstb_textedit.h" />
     <ClInclude Include="..\..\..\..\imGUI\imstb_truetype.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Homework2.h" />
     <ClInclude Include="Homework3.h" />
     <ClInclude Include="Homework4.h" />

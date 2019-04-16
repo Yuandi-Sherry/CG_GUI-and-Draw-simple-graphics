@@ -16,7 +16,7 @@
 using namespace std;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow * window);
+void processInput(GLFWwindow * window, Homework5 & homework5);
 
 void initGUI(GLFWwindow* window);
 void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3, Homework4 & homework4, Homework5 & homework5);
@@ -52,6 +52,7 @@ int main() {
 		while (!glfwWindowShouldClose(window)) {
 			// 检查触发事件、更新窗口，回调
 			glfwPollEvents();
+			processInput(window, homework5);
 			glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			// 作业对象的显示控制
@@ -63,6 +64,7 @@ int main() {
 			//homework4.displayCosmos();
 			// 交换缓冲、绘制、显示
 			glfwSwapBuffers(window);
+			
 		}
 
 		// 释放/删除资源
@@ -116,11 +118,11 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 /*
  * 处理输入
  */
-void processInput(GLFWwindow * window, Homework4 & homework4) {
+void processInput(GLFWwindow * window, Homework5 & homework5) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
-	//homework4.processInput();
+	homework5.processInput(window);
 }
 
 
