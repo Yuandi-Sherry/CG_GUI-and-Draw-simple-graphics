@@ -277,3 +277,7 @@ void Homework3::imGuiSetting() {
 	}
 }
 
+
+void Homework3::processInput() {
+
+}

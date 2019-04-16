@@ -27,6 +27,7 @@ public:
 	void displayController();
 	void imGuiSetting();
 	void imGuiMenuSetting();
+	void processInput();
 
 	// options
 	bool triangleFrame;

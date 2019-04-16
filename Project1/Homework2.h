@@ -19,6 +19,7 @@ public:
 	void displayRec();
 	void displayTriangle();
 	void displaySeveralTriangle();
+	void processInput();
 
 	bool homework2;
 	bool basic;

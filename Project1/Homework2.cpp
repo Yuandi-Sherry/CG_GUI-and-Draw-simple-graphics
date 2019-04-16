@@ -261,3 +261,7 @@ void Homework2::imGuiSetting() {
 		ImGui::ColorEdit3("Triangle color", (float*)&triangleColor);
 	}
 }
+
+void Homework2::processInput() {
+
+}

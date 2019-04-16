@@ -24,11 +24,12 @@ public:
 	GLuint createTexture(char const *filePath);
 	void displayCosmos();
 	void prepareCosmos();
+	void processInput();
 private:
 	bool homework4;
 	// basic part
 	// the length of the cube
-	float length = 2.0f;
+	float length = 1.0f;
 	// initial position in world coordinate
 	float transFactorX = 0.0f;
 	float transFactorY = 0.0f;
@@ -36,47 +37,47 @@ private:
 
 	float cubeVertices [216] = {
 		// red z = -2
-		-2.0f, -2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
-		 2.0f, -2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
-		 2.0f,  2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
-		 2.0f,  2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
-		-2.0f,  2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
-		-2.0f, -2.0f, -2.0f,  1.0f, 0.0f, 0.0f,
+		-1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,
+		 1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,
+		 1.0f,  1.0f, -1.0f,  1.0f, 0.0f, 0.0f,
+		 1.0f,  1.0f, -1.0f,  1.0f, 0.0f, 0.0f,
+		-1.0f,  1.0f, -1.0f,  1.0f, 0.0f, 0.0f,
+		-1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,
 		// purple z = 2
-		-2.0f, -2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
-		 2.0f, -2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
-		 2.0f,  2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
-		 2.0f,  2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
-		-2.0f,  2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
-		-2.0f, -2.0f,  2.0f,  1.0f, 0.0f, 1.0f,
+		-1.0f, -1.0f,  1.0f,  1.0f, 0.0f, 1.0f,
+		 1.0f, -1.0f,  1.0f,  1.0f, 0.0f, 1.0f,
+		 1.0f,  1.0f,  1.0f,  1.0f, 0.0f, 1.0f,
+		 1.0f,  1.0f,  1.0f,  1.0f, 0.0f, 1.0f,
+		-1.0f,  1.0f,  1.0f,  1.0f, 0.0f, 1.0f,
+		-1.0f, -1.0f,  1.0f,  1.0f, 0.0f, 1.0f,
 		// yellow z = 
-		-2.0f,  2.0f,  2.0f,  1.0f, 1.0f, 0.0f,
-		-2.0f,  2.0f, -2.0f,  1.0f, 1.0f, 0.0f,
-		-2.0f, -2.0f, -2.0f,  1.0f, 1.0f, 0.0f,
-		-2.0f, -2.0f, -2.0f,  1.0f, 1.0f, 0.0f,
-		-2.0f, -2.0f,  2.0f,  1.0f, 1.0f, 0.0f,
-		-2.0f,  2.0f,  2.0f,  1.0f, 1.0f, 0.0f,
+		-1.0f,  1.0f,  1.0f,  1.0f, 1.0f, 0.0f,
+		-1.0f,  1.0f, -1.0f,  1.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, -1.0f,  1.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, -1.0f,  1.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f,  1.0f,  1.0f, 1.0f, 0.0f,
+		-1.0f,  1.0f,  1.0f,  1.0f, 1.0f, 0.0f,
 		// blue z = 
-		 2.0f,  2.0f,  2.0f,  0.0f, 0.0f, 1.0f,
-		 2.0f,  2.0f, -2.0f,  0.0f, 0.0f, 1.0f,
-		 2.0f, -2.0f, -2.0f,  0.0f, 0.0f, 1.0f,
-		 2.0f, -2.0f, -2.0f,  0.0f, 0.0f, 1.0f,
-		 2.0f, -2.0f,  2.0f,  0.0f, 0.0f, 1.0f,
-		 2.0f,  2.0f,  2.0f,  0.0f, 0.0f, 1.0f,
+		 1.0f,  1.0f,  1.0f,  0.0f, 0.0f, 1.0f,
+		 1.0f,  1.0f, -1.0f,  0.0f, 0.0f, 1.0f,
+		 1.0f, -1.0f, -1.0f,  0.0f, 0.0f, 1.0f,
+		 1.0f, -1.0f, -1.0f,  0.0f, 0.0f, 1.0f,
+		 1.0f, -1.0f,  1.0f,  0.0f, 0.0f, 1.0f,
+		 1.0f,  1.0f,  1.0f,  0.0f, 0.0f, 1.0f,
 		 // green
-		-2.0f, -2.0f, -2.0f,  0.0f, 1.0f, 0.0f,
-		 2.0f, -2.0f, -2.0f,  0.0f, 1.0f, 0.0f,
-		 2.0f, -2.0f,  2.0f,  0.0f, 1.0f, 0.0f,
-		 2.0f, -2.0f,  2.0f,  0.0f, 1.0f, 0.0f,
-		-2.0f, -2.0f,  2.0f,  0.0f, 1.0f, 0.0f,
-		-2.0f, -2.0f, -2.0f,  0.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+		 1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 0.0f,
 		// qing
-		-2.0f,  2.0f, -2.0f,  0.0f, 1.0f, 1.0f,
-		 2.0f,  2.0f, -2.0f,  0.0f, 1.0f, 1.0f,
-		 2.0f,  2.0f,  2.0f,  0.0f, 1.0f, 1.0f,
-		 2.0f,  2.0f,  2.0f,  0.0f, 1.0f, 1.0f,
-		-2.0f,  2.0f,  2.0f,  0.0f, 1.0f, 1.0f,
-		-2.0f,  2.0f, -2.0f,  0.0f, 1.0f, 1.0f
+		-1.0f,  1.0f, -1.0f,  0.0f, 1.0f, 1.0f,
+		 1.0f,  1.0f, -1.0f,  0.0f, 1.0f, 1.0f,
+		 1.0f,  1.0f,  1.0f,  0.0f, 1.0f, 1.0f,
+		 1.0f,  1.0f,  1.0f,  0.0f, 1.0f, 1.0f,
+		-1.0f,  1.0f,  1.0f,  0.0f, 1.0f, 1.0f,
+		-1.0f,  1.0f, -1.0f,  0.0f, 1.0f, 1.0f
 	};
 	int shaderProgram;
 	bool translation;
@@ -104,7 +105,17 @@ private:
 	// bonus part
 	MySphere sun;
 	MySphere earth;
-	
+
+	// camera
+	// hm5 - Ä£ÄâÉãÏñ»ú
+	glm::vec3 cameraPos;
+	glm::vec3 cameraTarget;
+	glm::vec3 cameraDirection;
+	glm::vec3 up;
+	glm::vec3 cameraRight;
+	// ÉÏÖá
+	glm::vec3 cameraUp;
+	glm::vec3 cameraFront;
 };
 
 
