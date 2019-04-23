@@ -1,6 +1,5 @@
 #include "Homework5.h"
 #include <iostream>
-#include "Homework5.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -139,7 +138,7 @@ void Homework5::imGuiMenuSetting() {
 }
 
 void Homework5::initVars() {
-	homework5 = true;
+	homework5 = false;
 	coordinate_transform = false;
 	x = -1.5f;
 	y = 0.5f;

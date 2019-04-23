@@ -10,6 +10,7 @@
 #include "Homework3.h"
 #include "Homework4.h"
 #include "Homework5.h"
+#include "Homework6.h"
 #include "ShaderProgram.h"
 #include "MySphere.h"
 #define N 888
@@ -21,7 +22,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow * window, Homework5 & homework5);
 
 void initGUI(GLFWwindow* window);
-void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3, Homework4 & homework4, Homework5 & homework5);
+void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3, Homework4 & homework4);
 GLFWwindow* initialize();
 int windowWidth = 1200;
 int windowHeight = 1200;
@@ -47,6 +48,7 @@ const char* glsl_version = "#version 130";
 // 清屏颜色
 ImVec4 clear_color = ImVec4(0, 0, 0, 1.00f);
 Homework5 homework5;
+Homework6 homework6;
 int main() {
 	try {
 		GLFWwindow* window = initialize();
@@ -56,6 +58,7 @@ int main() {
 		Homework3 homework3(vertexShaderFile, fragmentShaderFile);
 		Homework4 homework4("coor_shader.vs", "coor_shader.fs");
 		homework5.init("coor_shader.vs", "coor_shader.fs");
+		homework6.init("coor_shader.vs", "coor_shader.fs");
 
 		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 		// 鼠标输入相关设置
@@ -76,7 +79,8 @@ int main() {
 			homework3.displayController();
 			homework4.displayController();
 			homework5.displayController();
-			displayGUI(window, homework2, homework3, homework4, homework5);
+			homework6.displayController();
+			displayGUI(window, homework2, homework3, homework4);
 			//homework4.displayCosmos();
 			// 交换缓冲、绘制、显示
 			glfwSwapBuffers(window);
@@ -166,7 +170,7 @@ void initGUI(GLFWwindow* window) {
 	ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
-void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3, Homework4 & homework4, Homework5 & homework5) {
+void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3, Homework4 & homework4) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -178,13 +182,14 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 		homework3.imGuiMenuSetting();
 		homework4.imGuiMenuSetting();
 		homework5.imGuiMenuSetting();
+		homework6.imGuiMenuSetting();
 		ImGui::EndMenuBar();
 	}
 	homework2.imGuiSetting();
 	homework3.imGuiSetting();
 	homework4.imGuiSetting();
 	homework5.imGuiSetting();
-
+	homework6.imGuiSetting();
 	ImGui::End();
 	// Rendering
 	ImGui::Render();

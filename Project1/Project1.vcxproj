@@ -126,6 +126,7 @@
     <ClCompile Include="Homework3.cpp" />
     <ClCompile Include="Homework4.cpp" />
     <ClCompile Include="Homework5.cpp" />
+    <ClCompile Include="Homework6.cpp" />
     <ClCompile Include="HomeworkBase.cpp" />
     <ClCompile Include="imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui_impl_opengl3.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Homework3.h" />
     <ClInclude Include="Homework4.h" />
     <ClInclude Include="Homework5.h" />
+    <ClInclude Include="Homework6.h" />
     <ClInclude Include="HomeworkBase.h" />
     <ClInclude Include="imgui_impl_glfw.h" />
     <ClInclude Include="imgui_impl_opengl3.h" />
