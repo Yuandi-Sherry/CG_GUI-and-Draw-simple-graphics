@@ -1,10 +1,5 @@
 #include "Homework6.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <stb_image.h>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+
 extern int windowWidth;
 extern int windowHeight;
 Homework6::Homework6(const string & vertexShaderFile, const string & fragmentShaderFile) {
@@ -19,42 +14,66 @@ void Homework6::init(const string & vertexShaderFile, const string & fragmentSha
 	shaderProgram = HomeworkBase::shaderProgram;
 	initVars();
 	camera.setCamera(glm::vec3(0.0f, 0.0f, 20.0f));
+	setCubeVAOVBO();
+	setLightSourceVAO();
+	Shader shader1("light_shader.vs", "light_shader.fs");
+	lightShader.setShaders(shader1.getVertexShader(), shader1.getFragmentShader());
+	Shader shader2("light_shader.vs", "light_source.fs");
+	lightSource.setShaders(shader2.getVertexShader(), shader2.getFragmentShader());
 }
 Homework6::~Homework6()
 {
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
 }
 void Homework6::initVars() {
 	homework6 = true;
+	lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
 }
 void Homework6::displayController() {
 	if (homework6) {
+		showLightShader();
 		showCube();
+		showLightSource();
+		
 	}
 }
 
-void Homework6::showCube() {
-	unsigned int VBO;
-	unsigned int VAO; // 顶点数组对象 
-	glGenBuffers(1, &VBO);
-	glGenVertexArrays(1, &VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindVertexArray(VAO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
+void Homework6::showLightSource() {
+	lightSource.useProgram();
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+	glm::mat4 view = view = camera.getViewMatrix();
+	// lightSource.setMat4("projection", projection);
+	glUniformMatrix4fv(glGetUniformLocation(lightSource.getShaderProgram(), "projection"), 1, GL_FALSE, &projection[0][0]);
+	// lightSource.setMat("view", view);
+	glUniformMatrix4fv(glGetUniformLocation(lightSource.getShaderProgram(), "view"), 1, GL_FALSE, &view[0][0]);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, lightPos);
+	model = glm::scale(model, glm::vec3(0.2f));
+	// lightSource.setMat4("Model", model);
+	glUniformMatrix4fv(glGetUniformLocation(lightSource.getShaderProgram(), "model"), 1, GL_FALSE, &model[0][0]);
+	glBindVertexArray(lightVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+}
 
+void Homework6::showLightShader() {
+	lightShader.useProgram();
+	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "objectColor"), 1.0f, 0.5f, 0.31f);
+	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "lightColor"), 1.0f, 1.0f, 1.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+	glm::mat4 view = camera.getViewMatrix();
+	glm::mat4 model = glm::mat4(1.0f);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
+}
+void Homework6::showCube (){
 	shaderProgramIns.useProgram();
 	// 计算矩阵
-	//glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
-	glm::mat4 view = glm::mat4(1.0f);
-	// 透视投影
-	projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
-	view = camera.getViewMatrix();
-	
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+	glm::mat4 view = camera.getViewMatrix();
+	// 透视投影	
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
 
@@ -65,8 +84,27 @@ void Homework6::showCube() {
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	
+}
+void Homework6::setLightSourceVAO() {
+	glGenVertexArrays(1, &lightVAO);
+	glBindVertexArray(lightVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+}
+
+void Homework6::setCubeVAOVBO() {
+	glGenBuffers(1, &VBO);
+	glGenVertexArrays(1, &VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindVertexArray(VAO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
 }
 void Homework6::imGuiSetting() {
 

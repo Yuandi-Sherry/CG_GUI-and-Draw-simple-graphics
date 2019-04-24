@@ -107,6 +107,15 @@
     <None Include="imgui.ini">
       <Filter>源文件\imgui</Filter>
     </None>
+    <None Include="light_shader.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="light_source.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="light_shader.vs">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MySphere.h">

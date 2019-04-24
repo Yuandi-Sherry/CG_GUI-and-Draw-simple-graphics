@@ -2,6 +2,12 @@
 #ifndef HOMEWORK_6_
 #include "Camera.h"
 #include "HomeworkBase.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <stb_image.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 class Homework6 : public HomeworkBase
 {
 public:
@@ -64,9 +70,29 @@ private:
 	};
 	// init position
 	float x, y, z;
+	unsigned int VBO;
+	unsigned int VAO; // 顶点数组对象 
+	// light source
+	unsigned int lightVAO;
+	glm::vec3 lightPos; // 光源在场景的世界空间坐标中的位置
+
+	// int
 	void initVars();
+	
+	void setCubeVAOVBO();
+	void setLightSourceVAO();
+	
+	// show
+	ShaderProgram lightSource;
+	unsigned int lightSourceID;
+	ShaderProgram lightShader;
+	unsigned int lightShaderID;
+	void showLightSource();
+	void showLightShader();
 	void showCube();
 	Camera camera;
+
+
 };
 
 #endif // !HOMEWORK_6_

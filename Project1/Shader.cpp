@@ -6,6 +6,8 @@ Shader::Shader(const string & vertexShaderFile, const string & fragmentShaderFil
 	compileShader(fragmentShader, fragmentShaderFile, GL_FRAGMENT_SHADER);
 }
 
+
+
 Shader::~Shader()
 {
 	glDeleteShader(vertexShader);

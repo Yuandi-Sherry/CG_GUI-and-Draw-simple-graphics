@@ -139,6 +139,9 @@
     <None Include="coor_shader.fs" />
     <None Include="coor_shader.vs" />
     <None Include="imgui.ini" />
+    <None Include="light_shader.fs" />
+    <None Include="light_shader.vs" />
+    <None Include="light_source.fs" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />
     <None Include="texture_shader.fs" />
