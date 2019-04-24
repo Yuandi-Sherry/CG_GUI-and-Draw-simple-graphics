@@ -60,21 +60,27 @@ void Homework6::showLightSource() {
 void Homework6::showLightedCube (){
 
 	lightShader.useProgram();
-	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "lightPosition"), lightPos.x, lightPos.y, lightPos.z);
+
 	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "objectColor"), 1.0f, 0.5f, 0.31f);
 	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "lightColor"), 1.0f, 1.0f, 1.0f);
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
 	glm::mat4 view = camera.getViewMatrix();
 	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0f));
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
+	// Âþ·´Éä
+	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "lightPosition"), lightPos.x, lightPos.y, lightPos.z);
+	// ¾µÃæ·´Éä
+	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "viewPos"), camera.position.x, camera.position.y, camera.position.z);
 	
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 	
 }
+
 void Homework6::setLightSourceVAO() {
 	glGenVertexArrays(1, &lightVAO);
 	glBindVertexArray(lightVAO);
