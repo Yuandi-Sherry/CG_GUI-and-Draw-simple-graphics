@@ -2,6 +2,8 @@
 
 extern int windowWidth;
 extern int windowHeight;
+extern float lastX;
+extern float lastY;
 Homework6::Homework6(const string & vertexShaderFile, const string & fragmentShaderFile) {
 	init(vertexShaderFile, fragmentShaderFile);
 	
@@ -32,10 +34,8 @@ void Homework6::initVars() {
 }
 void Homework6::displayController() {
 	if (homework6) {
-		showLightShader();
-		showCube();
+		showLightedCube();
 		showLightSource();
-		
 	}
 }
 
@@ -57,8 +57,10 @@ void Homework6::showLightSource() {
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
-void Homework6::showLightShader() {
+void Homework6::showLightedCube (){
+
 	lightShader.useProgram();
+	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "lightPosition"), lightPos.x, lightPos.y, lightPos.z);
 	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "objectColor"), 1.0f, 0.5f, 0.31f);
 	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "lightColor"), 1.0f, 1.0f, 1.0f);
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
@@ -67,20 +69,7 @@ void Homework6::showLightShader() {
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
-}
-void Homework6::showCube (){
-	shaderProgramIns.useProgram();
-	// 计算矩阵
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
-	glm::mat4 view = camera.getViewMatrix();
-	// 透视投影	
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
-
-	glm::mat4 model = glm::mat4(1.0f);
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
-	// 绘制
-	shaderProgramIns.useProgram();
+	
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
@@ -90,7 +79,7 @@ void Homework6::setLightSourceVAO() {
 	glGenVertexArrays(1, &lightVAO);
 	glBindVertexArray(lightVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,  6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 }
 
@@ -100,10 +89,9 @@ void Homework6::setCubeVAOVBO() {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBindVertexArray(VAO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 }
 void Homework6::imGuiSetting() {
@@ -125,4 +113,30 @@ void Homework6::imGuiMenuSetting() {
 		}
 		ImGui::EndMenu();
 	}
+}
+
+void Homework6::processInput(GLFWwindow * window) {
+	// 键盘输入
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		camera.processKeyboard(FORWARD, 0.1);
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		camera.processKeyboard(BACKWARD, 0.1);
+	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		camera.processKeyboard(LEFT, 0.1);
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		camera.processKeyboard(RIGHT, 0.1);
+	}
+}
+
+
+void Homework6::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+	lastX = xpos;
+	lastY = ypos;
+	camera.processMouseMovement(xoffset, yoffset);
+
 }

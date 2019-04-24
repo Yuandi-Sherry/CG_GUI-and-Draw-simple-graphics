@@ -116,9 +116,6 @@ GLFWwindow* initialize() {
 	// 将创建的窗口的上下文设为当前线程的主上下文
 	glfwMakeContextCurrent(window);
 
-	
-	
-	
 	glfwSwapInterval(1); // Enable vsync
 	// 初始化GLAD，加载系统相关OpenGL函数指针
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -146,6 +143,7 @@ void processInput(GLFWwindow * window, Homework5 & homework5) {
 		glfwSetWindowShouldClose(window, true);
 	}
 	homework5.processInput(window);
+	homework6.processInput(window);
 }
 
 
@@ -204,6 +202,7 @@ void displayGUI(GLFWwindow* window, Homework2 & homework2, Homework3 & homework3
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	homework5.mouseCallback(window, xpos, ypos);
+	homework6.mouseCallback(window, xpos, ypos);
 }
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	homework5.scrollCallback(window, xoffset, yoffset);
