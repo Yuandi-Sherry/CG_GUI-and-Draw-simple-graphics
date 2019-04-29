@@ -40,6 +40,7 @@ void Homework6::initVars() {
 	bonus = false;
 	ambientFactor = 0.1f;
 	diffuseFactor = 0.5f;
+	specularFactor = 0.1f;
 	reflectionPara = 32;
 }
 void Homework6::displayController() {
@@ -92,6 +93,7 @@ void Homework6::showLightedCube (){
 	// 环境光
 	glUniform1f(glGetUniformLocation((*thisShader).getShaderProgram(), "ambientFactor"), ambientFactor);
 	// 漫反射
+	glUniform1f(glGetUniformLocation((*thisShader).getShaderProgram(), "diffuseFactor"), diffuseFactor);
 	glUniform3f(glGetUniformLocation((*thisShader).getShaderProgram(), "lightPosition"), lightPos.x, lightPos.y, lightPos.z);
 	// 镜面反射
 	glUniform3f(glGetUniformLocation((*thisShader).getShaderProgram(), "viewPos"), camera.getPositon().x, camera.getPositon().y, camera.getPositon().z);
@@ -145,6 +147,7 @@ void Homework6::imGuiSetting() {
 		ImGui::DragFloat3("Light Color", (float*)glm::value_ptr(lightColor), 0.005f, 0.0f, 1.0f);
 		// ambient, diffuse, specular, reflectionRate
 		ImGui::DragFloat("ambient factor", &ambientFactor, 0.1f, 0.0f, 1.0f);
+		ImGui::DragFloat("diffuse factor", &diffuseFactor, 0.1f, 0.0f, 10.0f);
 		ImGui::DragFloat("specular factor", &specularFactor, 0.1f, 0.0f, 1.0f);
 		ImGui::DragInt("reflection parameter", &reflectionPara, 10, 2, 256 );
 	} 

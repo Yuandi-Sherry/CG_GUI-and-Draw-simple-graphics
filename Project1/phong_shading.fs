@@ -3,6 +3,7 @@ out vec4 FragColor;
 in vec3 Normal;
 in vec3 FragPos;
 uniform float ambientFactor;
+uniform float diffuseFactor;
 uniform float specularFactor;
 uniform uint reflectionPara;
 
@@ -20,7 +21,7 @@ void main() {
 	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(lightPosition - FragPos);
 	float diff = max(dot(norm, lightDir), 0.0); // 处理夹角>90的情况
-	vec3 diffuse = diff * lightColor;
+	vec3 diffuse = diffuseFactor * diff * lightColor;
 
 	// 镜面反射
 	vec3 viewDir = normalize(viewPos - FragPos); // 视线方向

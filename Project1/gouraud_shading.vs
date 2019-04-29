@@ -9,6 +9,7 @@ uniform vec3 viewPos;
 uniform vec3 lightColor;
 
 uniform float ambientFactor;
+uniform float diffuseFactor;
 uniform float specularFactor;
 uniform uint reflectionPara;
 
@@ -33,7 +34,7 @@ void main()
     vec3 norm = normalize(Normal); // 标准化法向量
     vec3 lightDir = normalize(lightPosition - Position); // 标准化光照方向，这里的lightPosition是在世界坐标系
     float diff = max(dot(norm, lightDir), 0.0); // 计算漫反射系数
-    vec3 diffuse = diff * lightColor; // 计算漫反射
+    vec3 diffuse = diffuseFactor * diff * lightColor; // 计算漫反射
     
     // 镜面反射
     vec3 viewDir = normalize(viewPos - Position); // 从观察点到物体位置的方向
