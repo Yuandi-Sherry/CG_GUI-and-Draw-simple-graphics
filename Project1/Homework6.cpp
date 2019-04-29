@@ -38,6 +38,9 @@ void Homework6::initVars() {
 	phong = false;
 	basic = true;
 	bonus = false;
+	ambientFactor = 0.1f;
+	diffuseFactor = 0.5f;
+	reflectionPara = 32;
 }
 void Homework6::displayController() {
 	if (homework6) {
@@ -67,40 +70,33 @@ void Homework6::showLightSource() {
 }
 
 void Homework6::showLightedCube (){
+	ShaderProgram * thisShader; 
 	if (phong) {
-		phongShading.useProgram();
-
-		glUniform3f(glGetUniformLocation(phongShading.getShaderProgram(), "objectColor"), 1.0f, 0.5f, 0.31f);
-		glUniform3f(glGetUniformLocation(phongShading.getShaderProgram(), "lightColor"), lightColor.x, lightColor.y, lightColor.z);
-		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
-		glm::mat4 view = camera.getViewMatrix();
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0f));
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
-		// 漫反射
-		glUniform3f(glGetUniformLocation(phongShading.getShaderProgram(), "lightPosition"), lightPos.x, lightPos.y, lightPos.z);
-		// 镜面反射
-		glUniform3f(glGetUniformLocation(phongShading.getShaderProgram(), "viewPos"), camera.getPositon().x, camera.getPositon().y, camera.getPositon().z);
-	}else {
-		gouraudShading.useProgram(); 
-
-		glUniform3f(glGetUniformLocation(gouraudShading.getShaderProgram(), "objectColor"), 1.0f, 0.5f, 0.31f);
-		glUniform3f(glGetUniformLocation(gouraudShading.getShaderProgram(), "lightColor"), lightColor.x, lightColor.y, lightColor.z);
-
-		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
-		glm::mat4 view = camera.getViewMatrix();
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0f));
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
-		// 漫反射
-		glUniform3f(glGetUniformLocation(gouraudShading.getShaderProgram(), "lightPosition"), lightPos.x, lightPos.y, lightPos.z);
-		// 镜面反射
-		glUniform3f(glGetUniformLocation(gouraudShading.getShaderProgram(), "viewPos"), camera.getPositon().x, camera.getPositon().y, camera.getPositon().z);
+		thisShader = &phongShading;
 	}
+	else {
+		thisShader = &gouraudShading;
+	}
+
+	(*thisShader).useProgram();
+
+	glUniform3f(glGetUniformLocation((*thisShader).getShaderProgram(), "objectColor"), 1.0f, 0.5f, 0.31f);
+	glUniform3f(glGetUniformLocation((*thisShader).getShaderProgram(), "lightColor"), lightColor.x, lightColor.y, lightColor.z);
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+	glm::mat4 view = camera.getViewMatrix();
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0f));
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
+	// 环境光
+	glUniform1f(glGetUniformLocation((*thisShader).getShaderProgram(), "ambientFactor"), ambientFactor);
+	// 漫反射
+	glUniform3f(glGetUniformLocation((*thisShader).getShaderProgram(), "lightPosition"), lightPos.x, lightPos.y, lightPos.z);
+	// 镜面反射
+	glUniform3f(glGetUniformLocation((*thisShader).getShaderProgram(), "viewPos"), camera.getPositon().x, camera.getPositon().y, camera.getPositon().z);
+	glUniform1f(glGetUniformLocation((*thisShader).getShaderProgram(), "specularFactor"), specularFactor);
+	glUniform1ui(glGetUniformLocation((*thisShader).getShaderProgram(), "reflectionPara"), reflectionPara);
 	
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -132,14 +128,25 @@ void Homework6::imGuiSetting() {
 		// 选择Phong和Gouraud Shading
 		ImGui::RadioButton("Phong", &phong, 1);
 		ImGui::RadioButton("Gouraud", &phong, 0);
-		// 视点 camera.position
 		ImGui::DragFloat3("View point", (float*)glm::value_ptr(viewPoint), 1.0f);
-		camera.setCamera(viewPoint);
+		// 视点 camera.position
+		if (lastViewPoint != viewPoint) {
+			camera.setCamera(viewPoint);
+			lastViewPoint = viewPoint;
+		}
+		else {
+			lastViewPoint = camera.getPositon();
+			viewPoint = camera.getPositon();
+		}
+		
 		// 光照位置
 		ImGui::DragFloat3("Light Position", (float*)glm::value_ptr(lightPos), 1.0f);
 		// 光照颜色
 		ImGui::DragFloat3("Light Color", (float*)glm::value_ptr(lightColor), 0.005f, 0.0f, 1.0f);
 		// ambient, diffuse, specular, reflectionRate
+		ImGui::DragFloat("ambient factor", &ambientFactor, 0.1f, 0.0f, 1.0f);
+		ImGui::DragFloat("specular factor", &specularFactor, 0.1f, 0.0f, 1.0f);
+		ImGui::DragInt("reflection parameter", &reflectionPara, 10, 2, 256 );
 	} 
 	if (bonus) {
 

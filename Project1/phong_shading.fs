@@ -2,6 +2,10 @@
 out vec4 FragColor;
 in vec3 Normal;
 in vec3 FragPos;
+uniform float ambientFactor;
+uniform float specularFactor;
+uniform uint reflectionPara;
+
 uniform vec3 lightPosition;
 uniform vec3 objectColor;
 uniform vec3 lightColor;
@@ -9,8 +13,8 @@ uniform vec3 viewPos;
 
 void main() {
 	// 环境光照
-	float ambientStrength = 0.1;
-	vec3 ambient = ambientStrength * lightColor;
+	// float ambientStrength = 0.1;
+	vec3 ambient = ambientFactor * lightColor;
 
 	// 漫反射
 	vec3 norm = normalize(Normal);
@@ -19,11 +23,10 @@ void main() {
 	vec3 diffuse = diff * lightColor;
 
 	// 镜面反射
-	float specularStrength = 0.5;
 	vec3 viewDir = normalize(viewPos - FragPos); // 视线方向
 	vec3 reflectDir = reflect(-lightDir, norm); 
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32); // 32 - 反光度
-	vec3 specular = specularStrength * spec * lightColor;
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), reflectionPara); // 32 - 反光度
+	vec3 specular = specularFactor * spec * lightColor;
 
 	vec3 result = (ambient + diffuse + specular) * objectColor;
 	FragColor = vec4(result, 1.0);

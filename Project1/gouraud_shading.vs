@@ -8,6 +8,10 @@ uniform vec3 lightPosition;
 uniform vec3 viewPos;
 uniform vec3 lightColor;
 
+uniform float ambientFactor;
+uniform float specularFactor;
+uniform uint reflectionPara;
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -23,8 +27,7 @@ void main()
     vec3 Normal = mat3(transpose(inverse(model))) * aNormal;
     
     // 环境光
-    float ambientStrength = 0.1;
-    vec3 ambient = ambientStrength * lightColor;
+    vec3 ambient = ambientFactor * lightColor;
   	
     // 漫反射
     vec3 norm = normalize(Normal); // 标准化法向量
@@ -33,11 +36,10 @@ void main()
     vec3 diffuse = diff * lightColor; // 计算漫反射
     
     // 镜面反射
-    float specularStrength = 0.1; // this is set higher to better show the effect of Gouraud shading 
     vec3 viewDir = normalize(viewPos - Position); // 从观察点到物体位置的方向
     vec3 reflectDir = reflect(-lightDir, norm);  // 反射方向
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32); // 
-    vec3 specular = specularStrength * spec * lightColor;      
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), reflectionPara); 
+    vec3 specular = specularFactor * spec * lightColor;      
 
     LightingColor = ambient + diffuse + specular;
 }

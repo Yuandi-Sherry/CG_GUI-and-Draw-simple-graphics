@@ -147,6 +147,12 @@ private:
 	int phong;
 	// 光照颜色
 	glm::vec3 lightColor;
+	// ambient, diffuse, specular 因子
+	float ambientFactor;
+	float diffuseFactor;
+	float specularFactor;
+	int reflectionPara; // 反光参数
+	glm::vec3 lastViewPoint;
 	
 };
 
