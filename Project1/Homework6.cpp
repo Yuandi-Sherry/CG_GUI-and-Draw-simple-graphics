@@ -14,14 +14,16 @@ Homework6::Homework6() {
 void Homework6::init(const string & vertexShaderFile, const string & fragmentShaderFile) {
 	HomeworkBase::init(vertexShaderFile, fragmentShaderFile);
 	shaderProgram = HomeworkBase::shaderProgram;
-	initVars();
 	camera.setCamera(glm::vec3(0.0f, 0.0f, 20.0f));
 	setCubeVAOVBO();
 	setLightSourceVAO();
-	Shader shader1("light_shader.vs", "light_shader.fs");
-	lightShader.setShaders(shader1.getVertexShader(), shader1.getFragmentShader());
-	Shader shader2("light_shader.vs", "light_source.fs");
-	lightSource.setShaders(shader2.getVertexShader(), shader2.getFragmentShader());
+	Shader phongShader("phong_shading.vs", "phong_shading.fs");
+	phongShading.setShaders(phongShader.getVertexShader(), phongShader.getFragmentShader());
+	Shader gouraudShader("gouraud_shading.vs", "gouraud_shading.fs");
+	gouraudShading.setShaders(gouraudShader.getVertexShader(), gouraudShader.getFragmentShader());
+	Shader lightSourceShader("phong_shading.vs", "light_source.fs");
+	lightSource.setShaders(lightSourceShader.getVertexShader(), lightSourceShader.getFragmentShader());
+	initVars();
 }
 Homework6::~Homework6()
 {
@@ -31,6 +33,11 @@ Homework6::~Homework6()
 void Homework6::initVars() {
 	homework6 = true;
 	lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
+	viewPoint = camera.getPositon();
+	lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	phong = false;
+	basic = true;
+	bonus = false;
 }
 void Homework6::displayController() {
 	if (homework6) {
@@ -41,6 +48,8 @@ void Homework6::displayController() {
 
 void Homework6::showLightSource() {
 	lightSource.useProgram();
+	// 设置颜色
+	glUniform3f(glGetUniformLocation(lightSource.getShaderProgram(), "lightColor"), lightColor.x, lightColor.y, lightColor.z);
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
 	glm::mat4 view = view = camera.getViewMatrix();
 	// lightSource.setMat4("projection", projection);
@@ -58,22 +67,40 @@ void Homework6::showLightSource() {
 }
 
 void Homework6::showLightedCube (){
+	if (phong) {
+		phongShading.useProgram();
 
-	lightShader.useProgram();
+		glUniform3f(glGetUniformLocation(phongShading.getShaderProgram(), "objectColor"), 1.0f, 0.5f, 0.31f);
+		glUniform3f(glGetUniformLocation(phongShading.getShaderProgram(), "lightColor"), lightColor.x, lightColor.y, lightColor.z);
+		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+		glm::mat4 view = camera.getViewMatrix();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0f));
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
+		// 漫反射
+		glUniform3f(glGetUniformLocation(phongShading.getShaderProgram(), "lightPosition"), lightPos.x, lightPos.y, lightPos.z);
+		// 镜面反射
+		glUniform3f(glGetUniformLocation(phongShading.getShaderProgram(), "viewPos"), camera.getPositon().x, camera.getPositon().y, camera.getPositon().z);
+	}else {
+		gouraudShading.useProgram(); 
 
-	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "objectColor"), 1.0f, 0.5f, 0.31f);
-	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "lightColor"), 1.0f, 1.0f, 1.0f);
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
-	glm::mat4 view = camera.getViewMatrix();
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0f));
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
-	// 漫反射
-	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "lightPosition"), lightPos.x, lightPos.y, lightPos.z);
-	// 镜面反射
-	glUniform3f(glGetUniformLocation(lightShader.getShaderProgram(), "viewPos"), camera.position.x, camera.position.y, camera.position.z);
+		glUniform3f(glGetUniformLocation(gouraudShading.getShaderProgram(), "objectColor"), 1.0f, 0.5f, 0.31f);
+		glUniform3f(glGetUniformLocation(gouraudShading.getShaderProgram(), "lightColor"), lightColor.x, lightColor.y, lightColor.z);
+
+		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+		glm::mat4 view = camera.getViewMatrix();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0f));
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
+		// 漫反射
+		glUniform3f(glGetUniformLocation(gouraudShading.getShaderProgram(), "lightPosition"), lightPos.x, lightPos.y, lightPos.z);
+		// 镜面反射
+		glUniform3f(glGetUniformLocation(gouraudShading.getShaderProgram(), "viewPos"), camera.getPositon().x, camera.getPositon().y, camera.getPositon().z);
+	}
 	
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -101,22 +128,27 @@ void Homework6::setCubeVAOVBO() {
 	glEnableVertexAttribArray(1);
 }
 void Homework6::imGuiSetting() {
+	if (basic) {
+		// 选择Phong和Gouraud Shading
+		ImGui::RadioButton("Phong", &phong, 1);
+		ImGui::RadioButton("Gouraud", &phong, 0);
+		// 视点 camera.position
+		ImGui::DragFloat3("View point", (float*)glm::value_ptr(viewPoint), 1.0f);
+		camera.setCamera(viewPoint);
+		// 光照位置
+		ImGui::DragFloat3("Light Position", (float*)glm::value_ptr(lightPos), 1.0f);
+		// 光照颜色
+		ImGui::DragFloat3("Light Color", (float*)glm::value_ptr(lightColor), 0.005f, 0.0f, 1.0f);
+		// ambient, diffuse, specular, reflectionRate
+	} 
+	if (bonus) {
 
+	}
 }
 void Homework6::imGuiMenuSetting() {
 	if (ImGui::BeginMenu("Homework6")) {
-		if (ImGui::BeginMenu("Basic")) {
-			/*ImGui::MenuItem("Coordinate Transform", NULL, &coordinate_transform);
-			ImGui::MenuItem("View Changeing", NULL, &viewChanging);
-			ImGui::MenuItem("FPS", NULL, &FPS);*/
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Bounus")) {
-			/*ImGui::MenuItem("Coordinate Transform", NULL, &coordinate_transform);
-			ImGui::MenuItem("View Changeing", NULL, &viewChanging);
-			ImGui::MenuItem("FPS", NULL, &FPS);*/
-			ImGui::EndMenu();
-		}
+		ImGui::MenuItem("Basic", NULL, &basic);
+		ImGui::MenuItem("Bonus", NULL, &bonus);
 		ImGui::EndMenu();
 	}
 }

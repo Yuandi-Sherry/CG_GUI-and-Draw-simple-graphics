@@ -107,13 +107,19 @@
     <None Include="imgui.ini">
       <Filter>源文件\imgui</Filter>
     </None>
-    <None Include="light_shader.fs">
-      <Filter>资源文件</Filter>
-    </None>
     <None Include="light_source.fs">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="light_shader.vs">
+    <None Include="phong_shading.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="phong_shading.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="gouraud_shading.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="gouraud_shading.fs">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>

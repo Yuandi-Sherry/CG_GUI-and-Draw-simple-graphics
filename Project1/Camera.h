@@ -17,7 +17,7 @@ const float ZOOM = 45.0f;
 class Camera
 {
 public:
-	glm::vec3 position;
+	
 	glm::vec3 front;
 	glm::vec3 up;
 	glm::vec3 right;
@@ -37,6 +37,9 @@ public:
 	~Camera() {
 
 	}
+	glm::vec3 getPositon() {
+		return position;
+	}
 	glm::mat4 getViewMatrix();
 	void processKeyboard(CameraMovement direction, float deltaTime);
 	void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
@@ -44,6 +47,7 @@ public:
 
 private:
 	void updateCameraVectors();
+	glm::vec3 position;
 };
 
 #endif // !CAMERA_H_
